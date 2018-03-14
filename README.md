@@ -1,2 +1,1 @@
-"# BBOM" 
-"# BBOM" 
+# 뽐(Be Best On Minor)
