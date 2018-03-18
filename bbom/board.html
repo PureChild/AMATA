@@ -1,12 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
+<style media="screen">
+
+</style>
 <head>
+    <link rel="stylesheet" href="board.css">
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>배틀 목록</title>
 </head>
 <body>
-<h1>배틀 목록</h1>
-<table>
+  <div id="top">
+    <h1 class="mainTitle">뽐</h1>
+    <img class="profile_img"src="" alt="">
+    <p class="search">
+    <input type="text" class="search_input" placeholder="검색할 내용을 입력해주세요" required></input>
+    <input type="submit" value="찾기" class="search_button"></input>
+    </p>
+  </div>
+<!-- <table>
     <tr>
         <th>번호</th>
         <th>제목</th>
@@ -15,9 +26,11 @@
         <th>조회수</th>
         <th>좋아요</th>
         <th>싫어요</th>
-    </tr>
+    </tr> -->
 
 </table>
-<a href="write.html">글쓰기</a>
+<button id="write_button" onclick="location.href='write.html' ">
+   <img src="https://ssl.gstatic.com/bt/C3341AA7A1A076756462EE2E5CD71C11/2x/btw_ic_speeddial_white_24dp_2x.png" alt="" />
+</button>
 </body>
 </html>
