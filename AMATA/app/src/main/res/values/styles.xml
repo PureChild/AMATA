@@ -17,4 +17,14 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="MyAlertDialogStyle" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:background">@color/appBgColor</item>
+        <item name="colorAccent">@color/btnYellow</item>
+    </style>
+
+    <style name="DialogEditTextStyle" parent="Widget.AppCompat.EditText">
+        <item name="colorControlNormal">@android:color/white</item>
+        <item name="colorControlActivated">@android:color/white</item>
+    </style>
+
 </resources>
