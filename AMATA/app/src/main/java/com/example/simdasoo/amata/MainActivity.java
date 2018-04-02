@@ -110,10 +110,10 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
+        if (id == R.id.nav_registered) {
+            Toast.makeText(getApplicationContext(),"등록 화면 나올 예정",Toast.LENGTH_LONG).show();
+        } else if (id == R.id.nav_necessary) {
+            Toast.makeText(getApplicationContext(),"선택 화면 나올 예정",Toast.LENGTH_LONG).show();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
