@@ -11,12 +11,6 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        //criterion 테이블 SQL문
-        StringBuffer crit_sb = new StringBuffer();
-        crit_sb.append(" CREATE TABLE criterion ( ");
-        crit_sb.append(" ID VARCHAR(20) PRIMARY KEY NOT NULL, ");
-        crit_sb.append(" IN_OUT VARCHAR(20)); ");
-
         //registered_list 테이블 SQL문
         StringBuffer reg_sb = new StringBuffer();
         reg_sb.append(" CREATE TABLE registered_list ( ");
@@ -35,7 +29,6 @@ public class DBHelper extends SQLiteOpenHelper {
         io_sb.append(" ID VARCHAR(20) PRIMARY KEY NOT NULL, ");
         io_sb.append(" IN_OUT VARCHAR(20)); ");
 
-        db.execSQL(crit_sb.toString());
         db.execSQL(reg_sb.toString());
         db.execSQL(check_sb.toString());
         db.execSQL(io_sb.toString());
