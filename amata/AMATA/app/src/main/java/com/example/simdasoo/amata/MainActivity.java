@@ -1,12 +1,13 @@
 package com.example.simdasoo.amata;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.view.ContextThemeWrapper;
 import android.view.View;
@@ -24,42 +25,19 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    public void Dialog(){
-        EditText et = new EditText(new ContextThemeWrapper(this, R.style.DialogEditTextStyle));
-        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.MyAlertDialogStyle));
-        builder.setTitle("태그를 등록해주세요");
-        builder.setView(et);
-        builder.setPositiveButton("OK",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(getApplicationContext(),"OK 버튼 클릭됨",Toast.LENGTH_LONG).show();
-                    }
-                });
-        builder.setNeutralButton("Cancel",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(getApplicationContext(),"Cancel 버튼 클릭됨",Toast.LENGTH_LONG).show();
-                    }
-                });
-        builder.show();
-    }
-
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //앱 실행 시 DB 생성
+        DBHelper dbHelper = new DBHelper(getApplicationContext());
+
         getWindow().setStatusBarColor(Color.BLACK);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Dialog();
-            }
-        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -69,6 +47,8 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.frag_container, new InitialFragment()).commit();
     }
 
     @Override
@@ -109,17 +89,15 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+        FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
+        Fragment fragment = null;
+
         if (id == R.id.nav_registered) {
-            Toast.makeText(getApplicationContext(),"등록 화면 나올 예정",Toast.LENGTH_LONG).show();
+            fragment = new InitialFragment();
         } else if (id == R.id.nav_necessary) {
-            Intent intent = new Intent(MainActivity.this, ListView.class);
-            startActivity(intent); //액티비티 이동
-
-
-
-
-
+            fragment = new ChecklistFragment();
         }
+        trans.replace(R.id.frag_container, fragment).commit();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

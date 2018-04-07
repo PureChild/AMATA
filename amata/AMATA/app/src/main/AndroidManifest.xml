@@ -21,7 +21,7 @@
         </activity>
 
         <!--체크리스트-->
-        <activity android:name=".ListView" />
+        <activity android:name="ChecklistFragment" />
 
     </application>
 
