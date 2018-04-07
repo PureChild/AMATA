@@ -49,6 +49,10 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //앱 실행 시 DB 생성
+        DBHelper dbHelper = new DBHelper(getApplicationContext());
+
         getWindow().setStatusBarColor(Color.BLACK);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
