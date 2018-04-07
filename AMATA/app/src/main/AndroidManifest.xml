@@ -23,22 +23,6 @@
         <!--체크리스트-->
         <activity android:name="ChecklistFragment" />
 
-        <service android:name=".SetSmartphoneID"
-            android:exported="true"
-            android:permission="android.permission.BIND_NFC_SERVICE">
-            <!-- Intent filter indicating that we support card emulation. -->
-            <intent-filter>
-                <action android:name="android.nfc.cardemulation.action.HOST_APDU_SERVICE"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-            </intent-filter>
-            <!-- Required XML configuration file, listing the AIDs that we are emulating cards
-                 for. This defines what protocols our card emulation service supports. -->
-            <meta-data android:name="android.nfc.cardemulation.host_apdu_service"
-                android:resource="@xml/aid"/>
-        </service>
-
     </application>
-
-    <uses-permission android:name="android.permission.NFC"/>
 
 </manifest>
