@@ -1,6 +1,7 @@
 package com.example.simdasoo.amata;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -29,6 +30,10 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        Intent intent = new Intent(this, SplashActivity.class);
+        startActivity(intent);
 
         //앱 실행 시 DB 생성
         DBHelper dbHelper = new DBHelper(getApplicationContext());

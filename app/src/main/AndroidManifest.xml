@@ -21,7 +21,10 @@
         </activity>
 
         <!--체크리스트-->
-        <activity android:name="ChecklistFragment" />
+        <!--<activity android:name="C" />-->
+
+        <activity android:name=".SplashActivity"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
 
     </application>
 
