@@ -9,6 +9,11 @@
     tools:showIn="@layout/initial_fragment"
     android:background="@color/appBgColor">
 
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/registered_list"/>
+
     <TextView
         android:id="@+id/tv_main"
         android:layout_width="wrap_content"
