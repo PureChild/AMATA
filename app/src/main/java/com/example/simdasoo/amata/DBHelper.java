@@ -21,7 +21,7 @@ public class DBHelper extends SQLiteOpenHelper {
         StringBuffer check_sb = new StringBuffer();
         check_sb.append(" CREATE TABLE check_info ( ");
         check_sb.append(" ID VARCHAR(20) PRIMARY KEY NOT NULL, ");
-        check_sb.append(" CHECK VARCHAR(20)); ");
+        check_sb.append(" CHECK_VALUE VARCHAR(20)); ");
 
         //in_out_info 테이블 SQL문
         StringBuffer io_sb = new StringBuffer();

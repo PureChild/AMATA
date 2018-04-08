@@ -10,30 +10,37 @@
         android:orientation="horizontal"
         android:layout_width="fill_parent">
 
-        <EditText android:layout_height="wrap_content"
-            android:id="@+id/inputText"
-            android:layout_width="0dp"
-            android:layout_weight="5"
-            android:hint="추가할 단어를 입력하세요."/>
+        <!--<EditText android:layout_height="wrap_content"-->
+            <!--android:id="@+id/inputText"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_weight="5"-->
+            <!--android:hint="추가할 단어를 입력하세요."/>-->
 
-        <Button android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:id="@+id/inputButton"
-            android:text="Add"/>
+        <!--<Button android:layout_height="wrap_content"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_weight="1"-->
+            <!--android:id="@+id/inputButton"-->
+            <!--android:text="Add"/>-->
 
     </LinearLayout>
 
-    <ListView android:layout_height="wrap_content"
-        android:id="@android:id/list"
-        android:layout_width="fill_parent"></ListView>
+    <!--<ListView android:layout_height="wrap_content"-->
+        <!--android:id="@android:id/list"-->
+        <!--android:layout_width="fill_parent"></ListView>-->
 
-    <TextView android:layout_width="wrap_content"
-        android:id="@android:id/empty"
-        android:text="표시할 내용이 없습니다."
+    <!--<TextView android:layout_width="wrap_content"-->
+        <!--android:id="@android:id/empty"-->
+        <!--android:text="표시할 내용이 없습니다."-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="center_horizontal"/>-->
+
+    <CheckBox
+        android:id="@+id/checkBox"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"/>
-
+        android:text="물건"
+        android:onClick="onCheckboxClicked"
+        />
 
 
 </LinearLayout>
