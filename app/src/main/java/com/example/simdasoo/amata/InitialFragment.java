@@ -21,7 +21,6 @@ import android.widget.Toast;
 
 //첫화면
 public class InitialFragment extends Fragment {
-    //등록된 물품의 개수 - 추후 sql문으로 바꿔야함
     int cntStuff;
 
     DBHelper dbHelper;
@@ -71,8 +70,9 @@ public class InitialFragment extends Fragment {
         return rootview;
     }
 
+    //등록하기 위한 dialog
     public void Dialog(){
-        EditText et = new EditText(new ContextThemeWrapper(getActivity(), R.style.DialogEditTextStyle));
+        final EditText et = new EditText(new ContextThemeWrapper(getActivity(), R.style.DialogEditTextStyle));
         AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.MyAlertDialogStyle));
         builder.setTitle("태그를 등록해주세요");
         builder.setView(et);
@@ -80,19 +80,17 @@ public class InitialFragment extends Fragment {
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         //등록 테스트
-//                        TextView tv = (TextView) getView().findViewById(R.id.tv_main);
-//                        testInsert(database, (String) tv.getText());
-
+                        testInsert(database, String.valueOf(et.getText()));
+//                        Toast.makeText(getActivity(),String.valueOf(et.getText())+" 등록됨",Toast.LENGTH_LONG).show();
                         //삭제 테스트
 //                        testDelete(database);
-                        cntStuff++;
                         refresh();
                     }
                 });
         builder.setNeutralButton("Cancel",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(getActivity(),String.valueOf(count(database)),Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(),"현재 " + String.valueOf(count(database)) + "개의 물건이 있습니다.",Toast.LENGTH_LONG).show();
                     }
                 });
         builder.show();
@@ -100,11 +98,7 @@ public class InitialFragment extends Fragment {
 
     //DB에 데이터 삽입
     private void testInsert(SQLiteDatabase database, String name){
-        ContentValues values = new ContentValues();
-        values.put("ID", name);
-        values.put("NAME", name);
-        database.insert("registered_list", null, values);
-        Toast.makeText(getActivity(),"ok",Toast.LENGTH_LONG).show();
+        database.execSQL("INSERT INTO registered_list VALUES('"+name+"','"+name+"')");
     }
 
     //DB 데이터 삭제
