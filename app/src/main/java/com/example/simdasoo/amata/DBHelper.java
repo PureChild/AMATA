@@ -12,10 +12,10 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         //registered_list 테이블 SQL문
-        StringBuffer benchmark = new StringBuffer();
-        benchmark.append(" CREATE TABLE benchmark ( ");
-        benchmark.append(" ID VARCHAR(20) PRIMARY KEY NOT NULL, ");
-        benchmark.append(" NAME VARCHAR(20)); ");
+//        StringBuffer benchmark = new StringBuffer();
+//        benchmark.append(" CREATE TABLE benchmark ( ");
+//        benchmark.append(" ID VARCHAR(20) PRIMARY KEY NOT NULL, ");
+//        benchmark.append(" NAME VARCHAR(20)); ");
 
         //registered_list 테이블 SQL문
         StringBuffer reg_sb = new StringBuffer();

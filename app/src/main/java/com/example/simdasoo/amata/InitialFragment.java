@@ -97,8 +97,8 @@ public class InitialFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         //등록 테스트
                         testInsert(database, String.valueOf(et.getText()));
-                        Toast.makeText(getActivity(),String.valueOf(et.getText())+" 등록됨",Toast.LENGTH_LONG).show();
-//                        showList(database);
+//                        Toast.makeText(getActivity(),String.valueOf(et.getText())+" 등록됨",Toast.LENGTH_LONG).show();
+                        showList(database);
                         //삭제 테스트
 //                        testDelete(database);
                         refresh();
@@ -115,22 +115,12 @@ public class InitialFragment extends Fragment {
 
     //DB에 데이터 삽입
     private void testInsert(SQLiteDatabase database, String name){
-        if (count(database)==0){
-            database.execSQL("INSERT INTO benchmark VALUES('" + name + "','" + name + "')");
-        }
-        else {
-            database.execSQL("INSERT INTO registered_list VALUES('" + name + "','" + name + "')");
-        }
+        database.execSQL("INSERT INTO registered_list VALUES('" + name + "','" + name + "')");
     }
 
     //DB 데이터 삭제
     private void testDelete(SQLiteDatabase database){
-        if (count(database)==0){
-            database.execSQL("DELETE FROM benchmark");
-        }
-        else {
-            database.execSQL("DELETE FROM registered_list");
-        }
+        database.execSQL("DELETE FROM registered_list");
         Toast.makeText(getActivity(),"ok",Toast.LENGTH_LONG).show();
     }
 
@@ -138,11 +128,6 @@ public class InitialFragment extends Fragment {
     //DB 데이터 개수 조회
     public int count(SQLiteDatabase database){
         int count = 0;
-        String sql_main = "select * from registered_list";
-        Cursor cursor_main = database.rawQuery(sql_main, null);
-        if(cursor_main != null){
-            count += 1; //호스트가 있으면 개수 + 1
-        }
         String sql_reg = "select * from registered_list";
         Cursor cursor_reg = database.rawQuery(sql_reg, null);
         if(cursor_reg != null){
@@ -153,9 +138,9 @@ public class InitialFragment extends Fragment {
 
 
     protected void showList(SQLiteDatabase database){
+        Cursor c = database.rawQuery("SELECT * FROM registered_list", null);
         try {
             //SELECT문을 사용하여 테이블에 있는 데이터를 가져옵니다..
-            Cursor c = database.rawQuery("SELECT * FROM registered_list", null);
             if (c != null) {
                 if (c.moveToFirst()) {
                     do {
