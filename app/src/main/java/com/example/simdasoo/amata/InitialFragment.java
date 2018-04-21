@@ -16,6 +16,7 @@ import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -34,16 +35,18 @@ public class InitialFragment extends Fragment {
 
     DBHelper dbHelper;
     SQLiteDatabase database;
-    private ArrayList<HashMap<String, String>> itemList;
-    private SimpleAdapter adapter;
-    private ListView list;
+    TextView tv;
+    String str="";
+
+    private ArrayList<String> mList = new ArrayList<String>();
+    private ListView mListView;
+    private ArrayAdapter mAdapter;
 
     public View getView(){
         View rootview = getLayoutInflater().inflate(R.layout.initial_fragment,null);
         return rootview;
     }
     public void refresh() {
-//        getFragmentManager().beginTransaction().replace(R.id.frag_container, this).commit();
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.detach(this).attach(this).commit();
     }
@@ -68,20 +71,23 @@ public class InitialFragment extends Fragment {
         //등록된 물건 수 확인
         cntStuff = count(database);
 
+        //ListView
+        mListView= (ListView) rootview.findViewById(R.id.registered_list);
+        mAdapter =  new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, mList);
+        mListView.setAdapter(mAdapter);
+        mAdapter.notifyDataSetChanged();
+
         //초기화면 등록된 물건이 없을 경우
-        TextView tv = (TextView) rootview.findViewById(R.id.tv_main);
+        tv = (TextView) rootview.findViewById(R.id.tv_main);
         if(cntStuff == 0){
 //            tv.setText("test");
             tv.setText("+ 버튼을 눌러 기준이 될 태그를 등록해주세요.");
         }
         else {
-//            tv.setText(" ");
+//            tv.setText(str);
+            mList.add(str);
             tv.setVisibility(View.GONE);
         }
-
-        //ListView
-        list = (ListView) rootview.findViewById(R.id.registered_list);
-        itemList = new ArrayList<HashMap<String,String>>();
 
         return rootview;
     }
@@ -92,18 +98,20 @@ public class InitialFragment extends Fragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.MyAlertDialogStyle));
         builder.setTitle("태그를 등록해주세요");
         builder.setView(et);
+        //ok 버튼 누르면
         builder.setPositiveButton("OK",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         //등록 테스트
-                        testInsert(database, String.valueOf(et.getText()));
 //                        Toast.makeText(getActivity(),String.valueOf(et.getText())+" 등록됨",Toast.LENGTH_LONG).show();
+                        testInsert(database, String.valueOf(et.getText()));
                         showList(database);
                         //삭제 테스트
 //                        testDelete(database);
                         refresh();
                     }
                 });
+        //cancel 버튼 누르면
         builder.setNeutralButton("Cancel",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
@@ -138,33 +146,21 @@ public class InitialFragment extends Fragment {
 
 
     protected void showList(SQLiteDatabase database){
-        Cursor c = database.rawQuery("SELECT * FROM registered_list", null);
+        Cursor cursor = database.rawQuery("SELECT * FROM registered_list", null);
         try {
             //SELECT문을 사용하여 테이블에 있는 데이터를 가져옵니다..
-            if (c != null) {
-                if (c.moveToFirst()) {
+            if (cursor != null) {
+                if (cursor.moveToFirst()) {
                     do {
-                        //테이블에서 두개의 컬럼값을 가져와서
-                        String ID = c.getString(c.getColumnIndex("ID"));
-                        String NAME = c.getString(c.getColumnIndex("NAME"));
-                        //HashMap에 넣고
-                        HashMap<String,String> item = new HashMap<String,String>();
-                        item.put("ID",ID);
-                        item.put("NAME",NAME);
-                        //ArrayList에 추가합니다..
-                        itemList.add(item);
-                    } while (c.moveToNext());
+                        //테이블에서 이름 가져오기
+                        String NAME = cursor.getString(cursor.getColumnIndex("NAME"));
+
+                        str = NAME;
+//                        Log.d("testing", str);
+                    } while (cursor.moveToNext());
                 }
             }
             database.close();
-            //새로운 apapter를 생성하여 데이터를 넣은 후..
-            adapter = new SimpleAdapter(
-                    getActivity(), itemList, R.layout.list_item,
-                    new String[]{"ID","NAME"},
-                    new int[]{ R.id.id, R.id.name}
-            );
-            //화면에 보여주기 위해 Listview에 연결합니다.
-            list.setAdapter(adapter);
         } catch (SQLiteException se) {
             Toast.makeText(getActivity(),  se.getMessage(), Toast.LENGTH_LONG).show();
             Log.e("",  se.getMessage());
