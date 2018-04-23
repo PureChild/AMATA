@@ -1,6 +1,5 @@
 package com.example.simdasoo.amata;
 
-import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -19,26 +18,21 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-
-import static android.content.Context.MODE_PRIVATE;
 
 
 //첫화면
 public class InitialFragment extends Fragment {
+    private final Query query = new Query();
     int cntStuff;
 
-    DBHelper dbHelper;
-    SQLiteDatabase database;
-    TextView tv;
-    String str="";
-
-    private ArrayList<String> mList = new ArrayList<String>();
+    private DBHelper dbHelper;
+    private SQLiteDatabase database;
+    private TextView tv;
+    private ArrayList<String> mList;
     private ListView mListView;
     private ArrayAdapter mAdapter;
 
@@ -69,13 +63,7 @@ public class InitialFragment extends Fragment {
         database = dbHelper.getWritableDatabase();
 
         //등록된 물건 수 확인
-        cntStuff = count(database);
-
-        //ListView
-        mListView= (ListView) rootview.findViewById(R.id.registered_list);
-        mAdapter =  new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, mList);
-        mListView.setAdapter(mAdapter);
-        mAdapter.notifyDataSetChanged();
+        cntStuff = query.count(database);
 
         //초기화면 등록된 물건이 없을 경우
         tv = (TextView) rootview.findViewById(R.id.tv_main);
@@ -84,12 +72,20 @@ public class InitialFragment extends Fragment {
             tv.setText("+ 버튼을 눌러 기준이 될 태그를 등록해주세요.");
         }
         else {
+            mListView= (ListView) rootview.findViewById(R.id.registered_list);
+            showList(database);
 //            tv.setText(str);
-            mList.add(str);
             tv.setVisibility(View.GONE);
         }
 
         return rootview;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        //종료 시 DB와 연결 끊기
+        database.close();
     }
 
     //등록하기 위한 dialog
@@ -104,10 +100,9 @@ public class InitialFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         //등록 테스트
 //                        Toast.makeText(getActivity(),String.valueOf(et.getText())+" 등록됨",Toast.LENGTH_LONG).show();
-                        testInsert(database, String.valueOf(et.getText()));
-                        showList(database);
+                        query.testInsert(database, String.valueOf(et.getText()));
                         //삭제 테스트
-//                        testDelete(database);
+//                        query.testDelete(database, getActivity());
                         refresh();
                     }
                 });
@@ -115,38 +110,16 @@ public class InitialFragment extends Fragment {
         builder.setNeutralButton("Cancel",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(getActivity(),"현재 " + String.valueOf(count(database)) + "개의 물건이 있습니다.",Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(),"현재 " + String.valueOf(query.count(database)) + "개의 물건이 있습니다.",Toast.LENGTH_LONG).show();
                     }
                 });
         builder.show();
     }
 
-    //DB에 데이터 삽입
-    private void testInsert(SQLiteDatabase database, String name){
-        database.execSQL("INSERT INTO registered_list VALUES('" + name + "','" + name + "')");
-    }
-
-    //DB 데이터 삭제
-    private void testDelete(SQLiteDatabase database){
-        database.execSQL("DELETE FROM registered_list");
-        Toast.makeText(getActivity(),"ok",Toast.LENGTH_LONG).show();
-    }
-
-
-    //DB 데이터 개수 조회
-    public int count(SQLiteDatabase database){
-        int count = 0;
-        String sql_reg = "select * from registered_list";
-        Cursor cursor_reg = database.rawQuery(sql_reg, null);
-        if(cursor_reg != null){
-            count += cursor_reg.getCount(); //등록된 물품 개수얻기
-        }
-        return count;
-    }
-
-
     protected void showList(SQLiteDatabase database){
         Cursor cursor = database.rawQuery("SELECT * FROM registered_list", null);
+        mList = new ArrayList<String>();
+        mAdapter =  new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, mList);
         try {
             //SELECT문을 사용하여 테이블에 있는 데이터를 가져옵니다..
             if (cursor != null) {
@@ -154,13 +127,13 @@ public class InitialFragment extends Fragment {
                     do {
                         //테이블에서 이름 가져오기
                         String NAME = cursor.getString(cursor.getColumnIndex("NAME"));
-
-                        str = NAME;
+                        mList.add(NAME);
 //                        Log.d("testing", str);
                     } while (cursor.moveToNext());
                 }
+                mListView.setAdapter(mAdapter);
+                mAdapter.notifyDataSetChanged();
             }
-            database.close();
         } catch (SQLiteException se) {
             Toast.makeText(getActivity(),  se.getMessage(), Toast.LENGTH_LONG).show();
             Log.e("",  se.getMessage());
