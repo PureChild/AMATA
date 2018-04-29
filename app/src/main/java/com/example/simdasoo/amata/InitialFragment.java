@@ -35,11 +35,6 @@ public class InitialFragment extends Fragment {
     private ArrayList<String> mList;
     private ListView mListView;
     private ArrayAdapter mAdapter;
-    private Intent intent;
-    private Tag tag;
-    private Dialog dialog;
-    private static EditText et;
-    private static boolean isDialogOpen = false;
 
     public View getView(){
         View rootview = getLayoutInflater().inflate(R.layout.initial_fragment,null);

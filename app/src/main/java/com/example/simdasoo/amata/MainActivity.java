@@ -21,7 +21,6 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private static boolean first_open = true;
-    private int cntBackPressed = 0;
     private BackPressCloseHandler backPressCloseHandler;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
