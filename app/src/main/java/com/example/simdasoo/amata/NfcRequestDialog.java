@@ -44,15 +44,20 @@ public class NfcRequestDialog extends Activity {
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //등록 테스트
-//                Toast.makeText(getApplicationContext(),String.valueOf(et.getText())+" 등록됨",Toast.LENGTH_SHORT).show();
-                query.testInsert(database, String.valueOf(et.getText()));
-                //삭제 테스트
-//                query.testDelete(database, getApplicationContext());
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(intent);
-                overridePendingTransition(0,0);
-                finish();
+                if(et.getHint()==null){
+                    Toast.makeText(getApplicationContext(),"태그를 등록해주세요",Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    //등록 테스트
+//                    Toast.makeText(getApplicationContext(),String.valueOf(et.getText())+" 등록됨",Toast.LENGTH_SHORT).show();
+                    query.testInsert(database, String.valueOf(et.getHint()),String.valueOf(et.getText()));
+                    //삭제 테스트
+//                    query.testDelete(database, getApplicationContext());
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(intent);
+                    overridePendingTransition(0, 0);
+                    finish();
+                }
             }
         });
 

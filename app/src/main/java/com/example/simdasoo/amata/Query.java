@@ -10,8 +10,8 @@ public class Query {
     }
 
     //DB에 데이터 삽입
-    void testInsert(SQLiteDatabase database, String name) {
-        database.execSQL("INSERT INTO registered_list VALUES('" + name + "','" + name + "')");
+    void testInsert(SQLiteDatabase database, String tagUID, String name) {
+        database.execSQL("INSERT INTO registered_list VALUES('" + tagUID + "','" + name + "')");
     }
 
     //DB 데이터 삭제
