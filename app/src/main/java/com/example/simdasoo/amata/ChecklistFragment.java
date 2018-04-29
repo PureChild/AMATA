@@ -1,53 +1,62 @@
 package com.example.simdasoo.amata;
 
-import android.support.v4.app.Fragment;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
+import android.widget.CheckedTextView;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 public class ChecklistFragment extends Fragment {
-    private ArrayList<String> list;
-    private ArrayAdapter<String> adapter;
-    private EditText inputText;
-    private Button inputButton;
+    private ArrayList<String> cList;
+    private ArrayAdapter<String> cAdapter;
+    private CheckedTextView checkedTextView;
+    private ListView cListView;
+    private DBHelper dbHelper;
+    private SQLiteDatabase database;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         //추가
         View rootview = inflater.inflate(R.layout.checklist_fragment, null);
+        cListView= (ListView) rootview.findViewById(R.id.necessary_list);
+        dbHelper = new DBHelper(getActivity());
+        database = dbHelper.getWritableDatabase();
+        showList(database);
 
         return rootview;
     }
-//    @Override
-//    public void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.checklist_fragment); //해당 아이디에 자신이 만든 레이아웃의 이름을 쓴다
-//
-//        inputText = (EditText)findViewById(R.id.inputText);
-//        inputButton = (Button)findViewById(R.id.inputButton);
-//        list = new ArrayList<String>();
-//
-//        inputButton.setOnClickListener(new OnClickListener(){
-//
-//            @Override
-//            public void onClick(View v) {
-//                list.add(inputText.getText().toString());
-//                inputText.setText("");
-//                adapter.notifyDataSetChanged();
-//            }
-//        });
-//
-//        adapter = new ArrayAdapter<String>(this,
-//                android.R.layout.simple_list_item_1, list);
-//
-//        setListAdapter(adapter);
-//    }
+    protected void showList(SQLiteDatabase database){
+        Cursor cursor = database.rawQuery("SELECT * FROM registered_list", null);
+        cList = new ArrayList<String>();
+        cAdapter =  new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_multiple_choice, cList);
+        try {
+            //SELECT문을 사용하여 테이블에 있는 데이터를 가져옵니다.
+            if (cursor != null) {
+                if (cursor.moveToFirst()) {
+                    do {
+                        //테이블에서 이름 가져오기
+                        String NAME = cursor.getString(cursor.getColumnIndex("NAME"));
+                        cList.add(NAME);
+                    } while (cursor.moveToNext());
+                }
+                cListView.setAdapter(cAdapter);
+                cAdapter.notifyDataSetChanged();
+            }
+        } catch (SQLiteException se) {
+            Toast.makeText(getActivity(),  se.getMessage(), Toast.LENGTH_LONG).show();
+            Log.e("",  se.getMessage());
+        }
+    }
 }
