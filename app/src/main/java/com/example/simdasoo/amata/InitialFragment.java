@@ -1,17 +1,17 @@
 package com.example.simdasoo.amata;
 
-import android.content.DialogInterface;
+import android.app.Dialog;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
-import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +35,11 @@ public class InitialFragment extends Fragment {
     private ArrayList<String> mList;
     private ListView mListView;
     private ArrayAdapter mAdapter;
+    private Intent intent;
+    private Tag tag;
+    private Dialog dialog;
+    private static EditText et;
+    private static boolean isDialogOpen = false;
 
     public View getView(){
         View rootview = getLayoutInflater().inflate(R.layout.initial_fragment,null);
@@ -50,11 +55,13 @@ public class InitialFragment extends Fragment {
         //추가
         View rootview = getView();
 
+        //버튼
         FloatingActionButton fab = (FloatingActionButton) rootview.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Dialog();
+                Intent intent = new Intent(getActivity(), NfcRequestDialog.class);
+                startActivity(intent);
             }
         });
 
@@ -88,32 +95,9 @@ public class InitialFragment extends Fragment {
         database.close();
     }
 
-    //등록하기 위한 dialog
-    public void Dialog(){
-        final EditText et = new EditText(new ContextThemeWrapper(getActivity(), R.style.DialogEditTextStyle));
-        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getActivity(), R.style.MyAlertDialogStyle));
-        builder.setTitle("태그를 등록해주세요");
-        builder.setView(et);
-        //ok 버튼 누르면
-        builder.setPositiveButton("OK",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        //등록 테스트
-//                        Toast.makeText(getActivity(),String.valueOf(et.getText())+" 등록됨",Toast.LENGTH_LONG).show();
-                        query.testInsert(database, String.valueOf(et.getText()));
-                        //삭제 테스트
-//                        query.testDelete(database, getActivity());
-                        refresh();
-                    }
-                });
-        //cancel 버튼 누르면
-        builder.setNeutralButton("Cancel",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(getActivity(),"현재 " + String.valueOf(query.count(database)) + "개의 물건이 있습니다.",Toast.LENGTH_LONG).show();
-                    }
-                });
-        builder.show();
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
     }
 
     protected void showList(SQLiteDatabase database){

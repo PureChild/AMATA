@@ -17,7 +17,7 @@ public class Query {
     //DB 데이터 삭제
     void testDelete(SQLiteDatabase database, Context context) {
         database.execSQL("DELETE FROM registered_list");
-        Toast.makeText(context, "ok", Toast.LENGTH_LONG).show();
+        Toast.makeText(context, "ok", Toast.LENGTH_SHORT).show();
     }
 
     //DB 데이터 개수 조회
