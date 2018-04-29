@@ -16,7 +16,7 @@ import java.math.BigInteger;
 
 //다이얼로그 역할
 public class NfcRequestDialog extends Activity {
-    private final Query query = new Query();
+    private final Query query = new Query(this);
 
     private DBHelper dbHelper;
     private SQLiteDatabase database;

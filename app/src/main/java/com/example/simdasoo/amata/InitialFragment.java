@@ -1,11 +1,9 @@
 package com.example.simdasoo.amata;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -16,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,7 +23,7 @@ import java.util.ArrayList;
 
 //첫화면
 public class InitialFragment extends Fragment {
-    private final Query query = new Query();
+    private final Query query = new Query(getActivity());
     int cntStuff;
 
     private DBHelper dbHelper;
