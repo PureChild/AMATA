@@ -98,6 +98,8 @@ public class NfcRequestDialog extends Activity {
         if (tag != null) {
             byte[] tagId = tag.getId();
             et.setHint(hex2uid(bin2hex(tagId)));
+            et.setCursorVisible(true);
+            et.setEnabled(true);
         }
     }
 

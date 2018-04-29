@@ -13,12 +13,15 @@ public class Query {
 
     //DB에 데이터 삽입
     void testInsert(SQLiteDatabase database, String tagUID, String name) {
-        if(!alreadyRegisterd(database, tagUID)) {
-            database.execSQL("INSERT INTO registered_list VALUES('" + tagUID + "','" + name + "')");
-        }
-        else{
-            Toast.makeText(context,"이미 등록된 태그입니다",Toast.LENGTH_SHORT).show();
-        }
+        //this is the real codes
+//        if(!alreadyRegisterd(database, tagUID)) {
+//            database.execSQL("INSERT INTO registered_list VALUES('" + tagUID + "','" + name + "')");
+//        }
+//        else{
+//            Toast.makeText(context,"이미 등록된 태그입니다",Toast.LENGTH_SHORT).show();
+//        }
+        //this codes for test
+        database.execSQL("INSERT INTO registered_list VALUES('" + name + "','" + name + "')");
     }
 
     //DB 데이터 삭제
