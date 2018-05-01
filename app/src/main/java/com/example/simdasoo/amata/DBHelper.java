@@ -27,13 +27,13 @@ public class DBHelper extends SQLiteOpenHelper {
         StringBuffer check_sb = new StringBuffer();
         check_sb.append(" CREATE TABLE check_info ( ");
         check_sb.append(" ID VARCHAR(20) PRIMARY KEY NOT NULL, ");
-        check_sb.append(" CHECK_VALUE VARCHAR(20)); ");
+        check_sb.append(" CHECK_VALUE VARCHAR(2) DEFAULT 'N'); ");
 
-        //in_out_info 테이블 SQL문
+        //inout_info 테이블 SQL문
         StringBuffer io_sb = new StringBuffer();
-        io_sb.append(" CREATE TABLE in_out_info ( ");
+        io_sb.append(" CREATE TABLE inout_info ( ");
         io_sb.append(" ID VARCHAR(20) PRIMARY KEY NOT NULL, ");
-        io_sb.append(" IN_OUT VARCHAR(20)); ");
+        io_sb.append(" IN_OUT VARCHAR(2) DEFAULT 'I'); ");
 
         db.execSQL(reg_sb.toString());
         db.execSQL(check_sb.toString());
