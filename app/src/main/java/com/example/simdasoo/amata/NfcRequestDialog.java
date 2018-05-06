@@ -13,6 +13,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.simdasoo.amata.contents.DBHelper;
+
 import java.math.BigInteger;
 
 //다이얼로그 역할
@@ -45,10 +47,10 @@ public class NfcRequestDialog extends Activity {
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                if(et.getHint() == null){
-//                    Toast.makeText(getApplicationContext(),"태그를 등록해주세요",Toast.LENGTH_SHORT).show();
-//                }
-//                else {
+                if(et.getHint() == null){
+                    Toast.makeText(getApplicationContext(),"태그를 등록해주세요",Toast.LENGTH_SHORT).show();
+                }
+                else {
                     //등록 테스트
 //                    Toast.makeText(getApplicationContext(),String.valueOf(et.getText())+" 등록됨",Toast.LENGTH_SHORT).show();
                     if(et.getText().toString() == null || et.getText().toString().equals("")) {
@@ -66,7 +68,7 @@ public class NfcRequestDialog extends Activity {
                     overridePendingTransition(0, 0);
                     finish();
                 }
-//            }
+            }
         });
 
         Button btnCancel = findViewById(R.id.btnCancel);

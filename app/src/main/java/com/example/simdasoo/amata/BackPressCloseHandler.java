@@ -27,8 +27,8 @@ class BackPressCloseHandler {
             activity.startActivity(t);
 
             activity.moveTaskToBack(true);
-            activity.finish();
-            android.os.Process.killProcess(android.os.Process.myPid());
+//            activity.finish();
+//            android.os.Process.killProcess(android.os.Process.myPid());
         }
     }
 
