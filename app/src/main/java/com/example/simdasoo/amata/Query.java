@@ -17,20 +17,24 @@ public class Query {
         String n = null;
         //this is the real codes
         //기등록된 태그가 아닌 경우 등록
-//        try {
-//            database.execSQL("INSERT INTO registered_list VALUES('" + tagUID + "','" + name + "')");
-//        } catch (SQLException e) {
-//            Toast.makeText(context,"이미 등록된 태그입니다",Toast.LENGTH_SHORT).show();
-//        }
+        try {
+            database.execSQL("INSERT INTO registered_list VALUES('" + tagUID + "','" + name + "')");
+            database.execSQL("INSERT INTO check_info(ID) VALUES('" + tagUID + "')");
+            database.execSQL("INSERT INTO inout_info(ID) VALUES('" + tagUID + "')");
+        } catch (SQLException e) {
+            Toast.makeText(context,"이미 등록된 태그입니다",Toast.LENGTH_SHORT).show();
+        }
         //this codes for test
-        database.execSQL("INSERT INTO registered_list VALUES('" + name + "','" + name + "')");
-        database.execSQL("INSERT INTO check_info(ID) VALUES('" + name + "')");
-        database.execSQL("INSERT INTO inout_info(ID) VALUES('" + name + "')");
+//        database.execSQL("INSERT INTO registered_list VALUES('" + name + "','" + name + "')");
+//        database.execSQL("INSERT INTO check_info(ID) VALUES('" + name + "')");
+//        database.execSQL("INSERT INTO inout_info(ID) VALUES('" + name + "')");
     }
 
     //DB 데이터 삭제
     void testDelete(SQLiteDatabase database, Context context) {
         database.execSQL("DELETE FROM registered_list");
+        database.execSQL("DELETE FROM check_info");
+        database.execSQL("DELETE FROM inout_info");
         Toast.makeText(context, "ok", Toast.LENGTH_SHORT).show();
     }
 

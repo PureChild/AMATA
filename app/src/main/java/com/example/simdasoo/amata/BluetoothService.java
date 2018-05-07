@@ -374,7 +374,7 @@ public class BluetoothService {
 					// InputStream으로부터 값을 받는 읽는 부분(값을 받는다)
 					bytes = mmInStream.read(buffer);
 					if(buffer != null) {
-						strArrId[index] = new String(buffer, 0, bytes);;
+						strArrId[index] = new String(buffer, 0, bytes);
 						index++;
 					}
 					if(strArrId[2] != null) {

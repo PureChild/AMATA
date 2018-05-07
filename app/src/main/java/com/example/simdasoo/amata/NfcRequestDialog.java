@@ -25,6 +25,8 @@ public class NfcRequestDialog extends Activity {
     private NfcAdapter nfcAdapter;
     private PendingIntent pendingIntent;
     private EditText et;
+    private String tagUid;
+    private String tagName;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,28 +47,33 @@ public class NfcRequestDialog extends Activity {
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                if(et.getHint() == null){
-//                    Toast.makeText(getApplicationContext(),"태그를 등록해주세요",Toast.LENGTH_SHORT).show();
-//                }
-//                else {
-                    //등록 테스트
-//                    Toast.makeText(getApplicationContext(),String.valueOf(et.getText())+" 등록됨",Toast.LENGTH_SHORT).show();
+                if(et.getHint() == null){
+                    Toast.makeText(getApplicationContext(),"태그를 등록해주세요",Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    // 등록 테스트
+                    // Toast.makeText(getApplicationContext(),String.valueOf(et.getText())+" 등록됨",Toast.LENGTH_SHORT).show();
                     if(et.getText().toString() == null || et.getText().toString().equals("")) {
                         Log.d("isNull?","true");
-                        query.testInsert(database, String.valueOf(et.getHint()), String.valueOf(et.getHint()));
+                        tagUid = String.valueOf(et.getHint());
+                        tagName = String.valueOf(et.getHint());
                     }
                     else {
                         Log.d("isNull?","false");
-                        query.testInsert(database, String.valueOf(et.getHint()), String.valueOf(et.getText()));
+                        tagUid = String.valueOf(et.getHint());
+                        tagName = String.valueOf(et.getText());
                     }
-                    //삭제 테스트
+                    query.testInsert(database, tagUid, tagName);
+
+                    // 삭제 테스트
 //                    query.testDelete(database, getApplicationContext());
+
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(intent);
                     overridePendingTransition(0, 0);
                     finish();
                 }
-//            }
+            }
         });
 
         Button btnCancel = findViewById(R.id.btnCancel);
