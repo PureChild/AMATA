@@ -34,5 +34,8 @@
         <activity android:name=".SplashActivity"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
 
+        <activity android:name=".DeviceListActivity"
+            android:theme="@android:style/Theme.DeviceDefault.Dialog"/>
+
     </application>
 </manifest>

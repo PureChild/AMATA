@@ -1,9 +1,12 @@
 package com.example.simdasoo.amata;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -19,6 +22,29 @@ import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    // <bluetooth>
+
+    // Debugging
+    private static final String TAG = "Main";
+
+    // Intent request code
+    private static final int REQUEST_CONNECT_DEVICE = 1;
+    private static final int REQUEST_ENABLE_BT = 2;
+
+    private BluetoothService btService = null;
+
+
+    private final Handler mHandler = new Handler() {
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+        }
+
+    };
+
+    // </bluetooth>
 
     private static boolean first_open = true;
     private BackPressCloseHandler backPressCloseHandler;
@@ -59,6 +85,15 @@ public class MainActivity extends AppCompatActivity
         getSupportFragmentManager().beginTransaction().replace(R.id.frag_container, new InitialFragment()).commit();
 
         backPressCloseHandler = new BackPressCloseHandler(this);
+
+
+        // 블루투스
+        // BluetoothService 클래스 생성
+        if(btService == null) {
+            btService = new BluetoothService(this, mHandler);
+        }
+
+        btService.enableBluetooth();
     }
 
     @Override
@@ -118,5 +153,31 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onPause() {
         super.onPause();
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d(TAG, "onActivityResult " + resultCode);
+
+        switch (requestCode) {
+
+            /** 추가된 부분 시작 **/
+            case REQUEST_CONNECT_DEVICE:
+                // When DeviceListActivity returns with a device to connect
+                if (resultCode == Activity.RESULT_OK) {
+                    btService.getDeviceInfo(data);
+                }
+                break;
+            /** 추가된 부분 끝 **/
+            case REQUEST_ENABLE_BT:
+                // When the request to enable Bluetooth returns
+                if (resultCode == Activity.RESULT_OK) {
+                    // Next Step
+                    btService.scanDevice();
+                } else {
+
+                    Log.d(TAG, "Bluetooth is not enabled");
+                }
+                break;
+        }
     }
 }
