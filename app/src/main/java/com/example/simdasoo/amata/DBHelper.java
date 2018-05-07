@@ -1,4 +1,4 @@
-package com.example.simdasoo.amata.contents;
+package com.example.simdasoo.amata;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

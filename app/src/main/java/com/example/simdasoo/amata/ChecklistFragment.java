@@ -1,4 +1,4 @@
-package com.example.simdasoo.amata.fragment;
+package com.example.simdasoo.amata;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -14,9 +14,6 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckedTextView;
 import android.widget.ListView;
 import android.widget.Toast;
-
-import com.example.simdasoo.amata.R;
-import com.example.simdasoo.amata.contents.DBHelper;
 
 import java.util.ArrayList;
 

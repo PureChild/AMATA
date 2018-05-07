@@ -1,4 +1,4 @@
-package com.example.simdasoo.amata.fragment;
+package com.example.simdasoo.amata;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,11 +17,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.example.simdasoo.amata.NfcRequestDialog;
-import com.example.simdasoo.amata.Query;
-import com.example.simdasoo.amata.R;
-import com.example.simdasoo.amata.contents.DBHelper;
 
 import java.util.ArrayList;
 
@@ -40,6 +36,10 @@ public class InitialFragment extends Fragment {
     public View getView(){
         View rootview = getLayoutInflater().inflate(R.layout.initial_fragment,null);
         return rootview;
+    }
+    public void refresh() {
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.detach(this).attach(this).commit();
     }
     @Nullable
     @Override
