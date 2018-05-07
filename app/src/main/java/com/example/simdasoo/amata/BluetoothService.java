@@ -4,8 +4,6 @@ package com.example.simdasoo.amata;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.UUID;
 
 import android.app.Activity;
@@ -13,12 +11,16 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
-import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
+import android.widget.Toast;
 
 public class BluetoothService {
+	// 블루투스 아이디 처리 관련
+    private String id = "";
+    private int index = 0;
+    private String[] strArrId = new String[3];
+
 	// Debugging
 	private static final String TAG = "BluetoothService";
 
@@ -32,7 +34,7 @@ public class BluetoothService {
 
 	private BluetoothAdapter btAdapter;
 
-	private Activity mActivity;
+	private MainActivity mainActivity;
 	private Handler mHandler;
 
 	private ConnectThread mConnectThread; // 변수명 다시
@@ -50,8 +52,8 @@ public class BluetoothService {
 	// device
 
 	// Constructors
-	public BluetoothService(Activity ac, Handler h) {
-		mActivity = ac;
+	public BluetoothService(MainActivity ac, Handler h) {
+		mainActivity = ac;
 		mHandler = h;
 
 		// BluetoothAdapter 얻기
@@ -95,7 +97,7 @@ public class BluetoothService {
 			Log.d(TAG, "Bluetooth Enable Request");
 
 			Intent i = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-			mActivity.startActivityForResult(i, REQUEST_ENABLE_BT);
+			mainActivity.startActivityForResult(i, REQUEST_ENABLE_BT);
 		}
 	}
 
@@ -105,8 +107,8 @@ public class BluetoothService {
 	public void scanDevice() {
 		Log.d(TAG, "Scan Device");
 
-		Intent serverIntent = new Intent(mActivity, DeviceListActivity.class);
-		mActivity.startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
+		Intent serverIntent = new Intent(mainActivity, DeviceListActivity.class);
+		mainActivity.startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
 	}
 
 	/**
@@ -371,7 +373,20 @@ public class BluetoothService {
 				try {
 					// InputStream으로부터 값을 받는 읽는 부분(값을 받는다)
 					bytes = mmInStream.read(buffer);
-
+					if(buffer != null) {
+						strArrId[index] = new String(buffer, 0, bytes);;
+						index++;
+					}
+					if(strArrId[2] != null) {
+						id = strArrId[0] + strArrId[1] + strArrId[2];
+						mainActivity.runOnUiThread(new Runnable() {
+							public void run() {
+								Toast.makeText(mainActivity, id, Toast.LENGTH_SHORT).show();
+							}
+						});
+						index = 0;
+						strArrId = new String[3];
+					}
 				} catch (IOException e) {
 					Log.e(TAG, "disconnected", e);
 					connectionLost();
