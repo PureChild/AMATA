@@ -62,6 +62,14 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
             overridePendingTransition(0,0);
             first_open = false;
+
+            // 블루투스
+            // BluetoothService 클래스 생성
+            if(btService == null) {
+                btService = new BluetoothService(this, mHandler);
+            }
+
+            btService.enableBluetooth();
         }
 
         //앱 실행 시 DB 생성
@@ -85,15 +93,6 @@ public class MainActivity extends AppCompatActivity
         getSupportFragmentManager().beginTransaction().replace(R.id.frag_container, new InitialFragment()).commit();
 
         backPressCloseHandler = new BackPressCloseHandler(this);
-
-
-        // 블루투스
-        // BluetoothService 클래스 생성
-        if(btService == null) {
-            btService = new BluetoothService(this, mHandler);
-        }
-
-        btService.enableBluetooth();
     }
 
     @Override
