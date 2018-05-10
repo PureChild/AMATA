@@ -200,4 +200,28 @@ public class InitialFragment extends Fragment {
             }
         }
     }
+
+    public void changeInOut(String id) {
+        String tagID = id.substring(0,id.length()-2);
+        query.changeInOut(database, tagID);
+
+        String inOutInfo = "";
+        String query = String.format("SELECT * FROM inout_info where id = '%s'",tagID);
+        Log.d("Query",query);
+        Cursor cursor = database.rawQuery(query, null);
+        Log.d("cursor", String.valueOf(cursor.getCount()));
+        if (cursor != null) {
+            if(cursor.getCount()==0) ;
+            else if (cursor.moveToFirst()) {
+                do {
+                    //테이블에서 이름 가져오기
+                    inOutInfo = cursor.getString(cursor.getColumnIndex("IN_OUT"));
+                } while (cursor.moveToNext());
+            }
+        }
+
+        Log.d("inOutInfo", inOutInfo);
+        if(inOutInfo.equals("I")) Toast.makeText(getActivity(), "밖으로 나감", Toast.LENGTH_LONG).show();
+        else Toast.makeText(getActivity(), "안으로 들어옴", Toast.LENGTH_LONG).show();
+    }
 }

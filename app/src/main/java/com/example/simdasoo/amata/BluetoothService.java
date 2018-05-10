@@ -382,6 +382,7 @@ public class BluetoothService {
 							public void run() {
 //								Toast.makeText(initialFragment.getActivity(), id, Toast.LENGTH_SHORT).show();
 								initialFragment.showTagName(id);
+								initialFragment.changeInOut(id);
 							}
 						});
 						index = 0;

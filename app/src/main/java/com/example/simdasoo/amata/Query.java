@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 import android.widget.Toast;
 
 public class Query {
@@ -47,5 +48,28 @@ public class Query {
             count += cursor_reg.getCount(); //등록된 물품 개수얻기
         }
         return count;
+    }
+
+    //InOut 변경
+    public void changeInOut(SQLiteDatabase database, String tagID) {
+        String inOutInfo = "";
+        String query = String.format("SELECT * FROM inout_info where id = '%s'",tagID);
+        Log.d("Query",query);
+        Cursor cursor = database.rawQuery(query, null);
+        Log.d("cursor", String.valueOf(cursor.getCount()));
+        if (cursor != null) {
+            if(cursor.getCount()==0) ;
+            else if (cursor.moveToFirst()) {
+                do {
+                    //테이블에서 이름 가져오기
+                    inOutInfo = cursor.getString(cursor.getColumnIndex("IN_OUT"));
+                } while (cursor.moveToNext());
+            }
+        }
+
+        String change2Out = String.format("UPDATE inout_info SET IN_OUT = 'O' where id = '%s'",tagID);
+        String change2In = String.format("UPDATE inout_info SET IN_OUT = 'I' where id = '%s'",tagID);
+        if(inOutInfo.equals("I")) database.execSQL(change2Out);
+        else database.execSQL(change2In);
     }
 }
