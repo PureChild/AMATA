@@ -190,12 +190,12 @@ public class InitialFragment extends Fragment {
         Cursor cursor = database.rawQuery(query, null);
         Log.d("cursor", String.valueOf(cursor.getCount()));
         if (cursor != null) {
-            if(cursor.getCount()==0) Toast.makeText(getActivity(), "등록되지 않은 태그입니다.", Toast.LENGTH_LONG).show();
+            if(cursor.getCount()==0) Toast.makeText(getActivity(), "등록되지 않은 태그입니다.", Toast.LENGTH_SHORT).show();
             else if (cursor.moveToFirst()) {
                 do {
                     //테이블에서 이름 가져오기
                     String NAME = cursor.getString(cursor.getColumnIndex("NAME"));
-                    Toast.makeText(getActivity(), NAME, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), NAME, Toast.LENGTH_SHORT).show();
                 } while (cursor.moveToNext());
             }
         }
@@ -221,7 +221,8 @@ public class InitialFragment extends Fragment {
         }
 
         Log.d("inOutInfo", inOutInfo);
-        if(inOutInfo.equals("I")) Toast.makeText(getActivity(), "밖으로 나감", Toast.LENGTH_LONG).show();
-        else Toast.makeText(getActivity(), "안으로 들어옴", Toast.LENGTH_LONG).show();
+        if(inOutInfo.equals("I")) Toast.makeText(getActivity(), "현재위치 : 안", Toast.LENGTH_SHORT).show();
+        else if(inOutInfo.equals("O")) Toast.makeText(getActivity(), "현재위치 : 밖", Toast.LENGTH_SHORT).show();
+        inOutInfo = "";
     }
 }
