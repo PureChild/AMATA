@@ -1,10 +1,13 @@
 package com.example.simdasoo.amata;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -32,6 +35,30 @@ public class InitialFragment extends Fragment {
     private ArrayList<String> mList;
     private ListView mListView;
     private ArrayAdapter mAdapter;
+    private MainActivity mainActivity;
+
+    // <bluetooth>
+
+    // Debugging
+    private static final String TAG = "Main";
+
+    // Intent request code
+    private static final int REQUEST_CONNECT_DEVICE = 1;
+    private static final int REQUEST_ENABLE_BT = 2;
+
+    private BluetoothService btService = null;
+
+
+    private final Handler mHandler = new Handler() {
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+        }
+
+    };
+
+    // </bluetooth>
 
     public View getView(){
         View rootview = getLayoutInflater().inflate(R.layout.initial_fragment,null);
@@ -77,6 +104,19 @@ public class InitialFragment extends Fragment {
             tv.setVisibility(View.GONE);
         }
 
+        mainActivity = (MainActivity) this.getActivity();
+        if(mainActivity.first_open){
+            // 블루투스
+            // BluetoothService 클래스 생성
+            if(btService == null) {
+                btService = new BluetoothService(this, mHandler);
+            }
+
+            btService.enableBluetooth();
+
+            mainActivity.first_open = false;
+        }
+
         return rootview;
     }
 
@@ -113,6 +153,51 @@ public class InitialFragment extends Fragment {
         } catch (SQLiteException se) {
             Toast.makeText(getActivity(),  se.getMessage(), Toast.LENGTH_LONG).show();
             Log.e("",  se.getMessage());
+        }
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d(TAG, "onActivityResult " + resultCode);
+
+        switch (requestCode) {
+
+            /** 추가된 부분 시작 **/
+            case REQUEST_CONNECT_DEVICE:
+                // When DeviceListActivity returns with a device to connect
+                if (resultCode == Activity.RESULT_OK) {
+                    btService.getDeviceInfo(data);
+                }
+                break;
+            /** 추가된 부분 끝 **/
+            case REQUEST_ENABLE_BT:
+                // When the request to enable Bluetooth returns
+                if (resultCode == Activity.RESULT_OK) {
+                    // Next Step
+                    btService.scanDevice();
+                } else {
+
+                    Log.d(TAG, "Bluetooth is not enabled");
+                }
+                break;
+        }
+    }
+
+    public void showTagName(String id) {
+        String tagID = id.substring(0,id.length()-2);
+        Log.d("ID",tagID);
+        String query = String.format("SELECT * FROM registered_list where id = '%s'",tagID);
+        Log.d("Query",query);
+        Cursor cursor = database.rawQuery(query, null);
+        Log.d("cursor", String.valueOf(cursor.getCount()));
+        if (cursor != null) {
+            if(cursor.getCount()==0) Toast.makeText(getActivity(), "등록되지 않은 태그입니다.", Toast.LENGTH_LONG).show();
+            else if (cursor.moveToFirst()) {
+                do {
+                    //테이블에서 이름 가져오기
+                    String NAME = cursor.getString(cursor.getColumnIndex("NAME"));
+                    Toast.makeText(getActivity(), NAME, Toast.LENGTH_LONG).show();
+                } while (cursor.moveToNext());
+            }
         }
     }
 }

@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.UUID;
 
-import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
@@ -34,7 +33,7 @@ public class BluetoothService {
 
 	private BluetoothAdapter btAdapter;
 
-	private MainActivity mainActivity;
+	private InitialFragment initialFragment;
 	private Handler mHandler;
 
 	private ConnectThread mConnectThread; // 변수명 다시
@@ -52,8 +51,8 @@ public class BluetoothService {
 	// device
 
 	// Constructors
-	public BluetoothService(MainActivity ac, Handler h) {
-		mainActivity = ac;
+	public BluetoothService(InitialFragment ac, Handler h) {
+		initialFragment = ac;
 		mHandler = h;
 
 		// BluetoothAdapter 얻기
@@ -97,7 +96,7 @@ public class BluetoothService {
 			Log.d(TAG, "Bluetooth Enable Request");
 
 			Intent i = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-			mainActivity.startActivityForResult(i, REQUEST_ENABLE_BT);
+			initialFragment.startActivityForResult(i, REQUEST_ENABLE_BT);
 		}
 	}
 
@@ -107,8 +106,8 @@ public class BluetoothService {
 	public void scanDevice() {
 		Log.d(TAG, "Scan Device");
 
-		Intent serverIntent = new Intent(mainActivity, DeviceListActivity.class);
-		mainActivity.startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
+		Intent serverIntent = new Intent(initialFragment.getActivity(), DeviceListActivity.class);
+		initialFragment.startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
 	}
 
 	/**
@@ -379,9 +378,10 @@ public class BluetoothService {
 					}
 					if(strArrId[2] != null) {
 						id = strArrId[0] + strArrId[1] + strArrId[2];
-						mainActivity.runOnUiThread(new Runnable() {
+						initialFragment.getActivity().runOnUiThread(new Runnable() {
 							public void run() {
-								Toast.makeText(mainActivity, id, Toast.LENGTH_SHORT).show();
+//								Toast.makeText(initialFragment.getActivity(), id, Toast.LENGTH_SHORT).show();
+								initialFragment.showTagName(id);
 							}
 						});
 						index = 0;
