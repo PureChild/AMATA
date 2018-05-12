@@ -1,5 +1,6 @@
 package com.example.simdasoo.amata;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckedTextView;
 import android.widget.ListView;
@@ -51,6 +53,12 @@ public class ChecklistFragment extends Fragment {
                     } while (cursor.moveToNext());
                 }
                 cListView.setAdapter(cAdapter);
+                cListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Toast.makeText(getActivity(), cList.get(position), Toast.LENGTH_SHORT).show();
+                    }
+                });
                 cAdapter.notifyDataSetChanged();
             }
         } catch (SQLiteException se) {
