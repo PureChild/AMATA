@@ -72,4 +72,28 @@ public class Query {
         if(inOutInfo.equals("I")) database.execSQL(change2Out);
         else database.execSQL(change2In);
     }
+
+    // 아이템 삭제
+    public void deleteItme(SQLiteDatabase database, String beforeName) {
+        String tagID = "";
+        String sql = String.format("SELECT * FROM registered_list where NAME = '%s'", beforeName);
+        Log.d("Query",sql);
+        Cursor cursor = database.rawQuery(sql, null);
+        Log.d("cursor", String.valueOf(cursor.getCount()));
+        if (cursor != null) {
+            if(cursor.getCount()==0) ;
+            else if (cursor.moveToFirst()) {
+                do {
+                    //테이블에서 이름 가져오기
+                    tagID = cursor.getString(cursor.getColumnIndex("ID"));
+                } while (cursor.moveToNext());
+            }
+        }
+        String dFromReg = String.format("DELETE FROM registered_list where ID = '%s'", tagID);
+        String dFromCh = String.format("DELETE FROM check_info where ID = '%s'", tagID);
+        String dFromIo = String.format("DELETE FROM inout_info where ID = '%s'", tagID);
+        database.execSQL(dFromReg);
+        database.execSQL(dFromCh);
+        database.execSQL(dFromIo);
+    }
 }

@@ -155,6 +155,7 @@ public class InitialFragment extends Fragment {
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 //                        Toast.makeText(getActivity(), mList.get(position), Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(getActivity(), ItemInfoDialog.class);
+                        intent.putExtra("beforeName",mList.get(position));
                         startActivity(intent);
                     }
                 });
