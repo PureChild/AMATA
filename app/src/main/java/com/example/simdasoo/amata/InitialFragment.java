@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -148,10 +149,17 @@ public class InitialFragment extends Fragment {
                     } while (cursor.moveToNext());
                 }
                 mListView.setAdapter(mAdapter);
+                // 아이템 클릭 이벤트 리스너 추가
+                mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Toast.makeText(getActivity(), mList.get(position), Toast.LENGTH_SHORT).show();
+                    }
+                });
                 mAdapter.notifyDataSetChanged();
             }
         } catch (SQLiteException se) {
-            Toast.makeText(getActivity(),  se.getMessage(), Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(),  se.getMessage(), Toast.LENGTH_SHORT).show();
             Log.e("",  se.getMessage());
         }
     }

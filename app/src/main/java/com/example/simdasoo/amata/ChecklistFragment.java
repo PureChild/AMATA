@@ -20,7 +20,6 @@ import java.util.ArrayList;
 public class ChecklistFragment extends Fragment {
     private ArrayList<String> cList;
     private ArrayAdapter<String> cAdapter;
-    private CheckedTextView checkedTextView;
     private ListView cListView;
     private DBHelper dbHelper;
     private SQLiteDatabase database;
