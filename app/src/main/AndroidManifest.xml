@@ -26,14 +26,15 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
+
+        <!--NFC 다이얼로그-->
         <activity android:name=".NfcRequestDialog" android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-
-        <!--체크리스트-->
-        <!--<activity android:name="C" />-->
-
+        <!--물품 정보 다이얼로그-->
+        <activity android:name=".ItemInfoDialog" android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <!--로딩 화면-->
         <activity android:name=".SplashActivity"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
-
+        <!--페어링 목록-->
         <activity android:name=".DeviceListActivity"
             android:theme="@android:style/Theme.DeviceDefault.Dialog"/>
 

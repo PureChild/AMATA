@@ -153,7 +153,9 @@ public class InitialFragment extends Fragment {
                 mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        Toast.makeText(getActivity(), mList.get(position), Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getActivity(), mList.get(position), Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(getActivity(), ItemInfoDialog.class);
+                        startActivity(intent);
                     }
                 });
                 mAdapter.notifyDataSetChanged();
