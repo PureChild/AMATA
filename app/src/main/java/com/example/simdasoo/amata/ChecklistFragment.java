@@ -20,6 +20,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 public class ChecklistFragment extends Fragment {
+    private final Query query = new Query(getActivity());
     private ArrayList<String> cList;
     private ArrayAdapter<String> cAdapter;
     private ListView cListView;
@@ -38,7 +39,7 @@ public class ChecklistFragment extends Fragment {
 
         return rootview;
     }
-    protected void showList(SQLiteDatabase database){
+    protected void showList(final SQLiteDatabase database){
         Cursor cursor = database.rawQuery("SELECT * FROM registered_list", null);
         cList = new ArrayList<String>();
         cAdapter =  new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_multiple_choice, cList);
@@ -56,7 +57,9 @@ public class ChecklistFragment extends Fragment {
                 cListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        Toast.makeText(getActivity(), cList.get(position), Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getActivity(), cList.get(position), Toast.LENGTH_SHORT).show();
+                        String name = cList.get(position);
+                        Toast.makeText(getActivity(), query.changeCheckInfo(database, name) , Toast.LENGTH_SHORT).show();
                     }
                 });
                 cAdapter.notifyDataSetChanged();

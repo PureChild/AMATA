@@ -225,7 +225,7 @@ public class InitialFragment extends Fragment {
             if(cursor.getCount()==0) ;
             else if (cursor.moveToFirst()) {
                 do {
-                    //테이블에서 이름 가져오기
+                    //테이블에서 inout 가져오기
                     inOutInfo = cursor.getString(cursor.getColumnIndex("IN_OUT"));
                 } while (cursor.moveToNext());
             }

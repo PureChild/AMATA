@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -65,7 +64,7 @@ public class ItemInfoDialog extends Activity {
                 }
                 else {
                     String newName = String.valueOf(et.getText());
-                    query.modifyItme(database, beforeName, newName);
+                    query.modifyItem(database, beforeName, newName);
                 }
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(intent);
