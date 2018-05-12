@@ -51,7 +51,6 @@ public class NfcRequestDialog extends Activity {
                     Toast.makeText(getApplicationContext(),"태그를 등록해주세요",Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    // 등록 테스트
                     // Toast.makeText(getApplicationContext(),String.valueOf(et.getText())+" 등록됨",Toast.LENGTH_SHORT).show();
                     if(et.getText().toString() == null || et.getText().toString().equals("")) {
                         Log.d("isNull?","true");
@@ -64,9 +63,6 @@ public class NfcRequestDialog extends Activity {
                         tagName = String.valueOf(et.getText());
                     }
                     query.testInsert(database, tagUid, tagName);
-
-                    // 삭제 테스트
-//                    query.testDelete(database, getApplicationContext());
 
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(intent);

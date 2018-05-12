@@ -31,14 +31,6 @@ public class Query {
 //        database.execSQL("INSERT INTO inout_info(ID) VALUES('" + name + "')");
     }
 
-    //DB 데이터 삭제
-    void testDelete(SQLiteDatabase database, Context context) {
-        database.execSQL("DELETE FROM registered_list");
-        database.execSQL("DELETE FROM check_info");
-        database.execSQL("DELETE FROM inout_info");
-        Toast.makeText(context, "ok", Toast.LENGTH_SHORT).show();
-    }
-
     //DB 데이터 개수 조회
     public int count(SQLiteDatabase database) {
         int count = 0;
@@ -97,6 +89,7 @@ public class Query {
         database.execSQL(dFromIo);
     }
 
+    // 아이템 이름 수정
     public void modifyItme(SQLiteDatabase database, String beforeName, String newName) {
         String tagID = "";
         String sql = String.format("SELECT * FROM registered_list where NAME = '%s'", beforeName);
