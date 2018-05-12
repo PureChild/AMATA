@@ -5,15 +5,11 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.nfc.NfcAdapter;
-import android.nfc.Tag;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import java.math.BigInteger;
 
 public class ItemInfoDialog extends Activity {
     private final Query query = new Query(this);
@@ -30,8 +26,8 @@ public class ItemInfoDialog extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.nfc_request);
-        et = (EditText) findViewById(R.id.tagDesc);
+        setContentView(R.layout.item_info);
+        et = (EditText) findViewById(R.id.nameValue);
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         Intent intent = new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
@@ -42,7 +38,7 @@ public class ItemInfoDialog extends Activity {
         database = dbHelper.getWritableDatabase();
 
         //버튼 이벤트 등록
-        Button btnOk = findViewById(R.id.btnOk);
+        Button btnOk = findViewById(R.id.btnDelete);
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -56,7 +52,7 @@ public class ItemInfoDialog extends Activity {
             }
         });
 
-        Button btnCancel = findViewById(R.id.btnCancel);
+        Button btnCancel = findViewById(R.id.btnModify);
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

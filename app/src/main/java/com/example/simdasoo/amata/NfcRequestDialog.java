@@ -32,7 +32,7 @@ public class NfcRequestDialog extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.nfc_request);
-        et = (EditText) findViewById(R.id.tagDesc);
+        et = (EditText) findViewById(R.id.nameValue);
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         Intent intent = new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
@@ -43,7 +43,7 @@ public class NfcRequestDialog extends Activity {
         database = dbHelper.getWritableDatabase();
 
         //버튼 이벤트 등록
-        Button btnOk = findViewById(R.id.btnOk);
+        Button btnOk = findViewById(R.id.btnDelete);
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -76,7 +76,7 @@ public class NfcRequestDialog extends Activity {
             }
         });
 
-        Button btnCancel = findViewById(R.id.btnCancel);
+        Button btnCancel = findViewById(R.id.btnModify);
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
