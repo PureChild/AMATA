@@ -59,11 +59,18 @@ public class ItemInfoDialog extends Activity {
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(),"수정버튼",Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(intent);
-                overridePendingTransition(0,0);
-                finish();
+//                Toast.makeText(getApplicationContext(),"수정버튼",Toast.LENGTH_SHORT).show();
+                if(et.getText().toString() == null || et.getText().toString().equals("")){
+                    Toast.makeText(getApplicationContext(),"수정할 이름을 입력해주세요",Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    String newName = String.valueOf(et.getText());
+                    query.modifyItme(database, beforeName, newName);
+                }
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(intent);
+                    overridePendingTransition(0, 0);
+                    finish();
             }
         });
     }

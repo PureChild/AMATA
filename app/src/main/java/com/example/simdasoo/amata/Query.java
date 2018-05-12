@@ -96,4 +96,23 @@ public class Query {
         database.execSQL(dFromCh);
         database.execSQL(dFromIo);
     }
+
+    public void modifyItme(SQLiteDatabase database, String beforeName, String newName) {
+        String tagID = "";
+        String sql = String.format("SELECT * FROM registered_list where NAME = '%s'", beforeName);
+        Log.d("Query",sql);
+        Cursor cursor = database.rawQuery(sql, null);
+        Log.d("cursor", String.valueOf(cursor.getCount()));
+        if (cursor != null) {
+            if(cursor.getCount()==0) ;
+            else if (cursor.moveToFirst()) {
+                do {
+                    //테이블에서 이름 가져오기
+                    tagID = cursor.getString(cursor.getColumnIndex("ID"));
+                } while (cursor.moveToNext());
+            }
+        }
+        String modifyName = String.format("UPDATE registered_list SET NAME = '%s' where ID = '%s'", newName, tagID);
+        database.execSQL(modifyName);
+    }
 }
