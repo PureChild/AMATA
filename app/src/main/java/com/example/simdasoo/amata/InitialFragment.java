@@ -216,22 +216,9 @@ public class InitialFragment extends Fragment {
         String tagID = id.substring(0,id.length()-2);
         query.changeInOut(database, tagID);
 
-        String inOutInfo = "";
-        String query = String.format("SELECT * FROM inout_info where id = '%s'",tagID);
-        Log.d("Query",query);
-        Cursor cursor = database.rawQuery(query, null);
-        Log.d("cursor", String.valueOf(cursor.getCount()));
-        if (cursor != null) {
-            if(cursor.getCount()==0) ;
-            else if (cursor.moveToFirst()) {
-                do {
-                    //테이블에서 inout 가져오기
-                    inOutInfo = cursor.getString(cursor.getColumnIndex("IN_OUT"));
-                } while (cursor.moveToNext());
-            }
-        }
-
+        String inOutInfo = query.findValue(database, "inout_info", "ID", tagID, "IN_OUT");
         Log.d("inOutInfo", inOutInfo);
+
         if(inOutInfo.equals("I")) Toast.makeText(getActivity(), "현재위치 : 안", Toast.LENGTH_SHORT).show();
         else if(inOutInfo.equals("O")) Toast.makeText(getActivity(), "현재위치 : 밖", Toast.LENGTH_SHORT).show();
         inOutInfo = "";

@@ -44,43 +44,17 @@ public class Query {
 
     //InOut 변경
     public void changeInOut(SQLiteDatabase database, String tagID) {
-        String inOutInfo = "";
-        String query = String.format("SELECT * FROM inout_info where id = '%s'",tagID);
-        Log.d("Query",query);
-        Cursor cursor = database.rawQuery(query, null);
-        Log.d("cursor", String.valueOf(cursor.getCount()));
-        if (cursor != null) {
-            if(cursor.getCount()==0) ;
-            else if (cursor.moveToFirst()) {
-                do {
-                    //테이블에서 in_out 정보 가져오기
-                    inOutInfo = cursor.getString(cursor.getColumnIndex("IN_OUT"));
-                } while (cursor.moveToNext());
-            }
-        }
+        String inout = findValue(database, "inout_info", "ID", tagID, "IN_OUT");
 
         String change2Out = String.format("UPDATE inout_info SET IN_OUT = 'O' where id = '%s'",tagID);
         String change2In = String.format("UPDATE inout_info SET IN_OUT = 'I' where id = '%s'",tagID);
-        if(inOutInfo.equals("I")) database.execSQL(change2Out);
+        if(inout.equals("I")) database.execSQL(change2Out);
         else database.execSQL(change2In);
     }
 
     // 아이템 삭제
-    public void deleteItme(SQLiteDatabase database, String beforeName) {
-        String tagID = "";
-        String sql = String.format("SELECT * FROM registered_list where NAME = '%s'", beforeName);
-        Log.d("Query",sql);
-        Cursor cursor = database.rawQuery(sql, null);
-        Log.d("cursor", String.valueOf(cursor.getCount()));
-        if (cursor != null) {
-            if(cursor.getCount()==0) ;
-            else if (cursor.moveToFirst()) {
-                do {
-                    //테이블에서 아이디 가져오기
-                    tagID = cursor.getString(cursor.getColumnIndex("ID"));
-                } while (cursor.moveToNext());
-            }
-        }
+    public void deleteItme(SQLiteDatabase database, String name) {
+        String tagID = findValue(database, "registered_list", "NAME", name, "ID");
         String dFromReg = String.format("DELETE FROM registered_list where ID = '%s'", tagID);
         String dFromCh = String.format("DELETE FROM check_info where ID = '%s'", tagID);
         String dFromIo = String.format("DELETE FROM inout_info where ID = '%s'", tagID);
@@ -91,41 +65,38 @@ public class Query {
 
     // 아이템 이름 수정
     public void modifyItem(SQLiteDatabase database, String beforeName, String newName) {
-        String tagID = "";
-        String sql = String.format("SELECT * FROM registered_list where NAME = '%s'", beforeName);
-        Log.d("Query",sql);
-        Cursor cursor = database.rawQuery(sql, null);
-        Log.d("cursor", String.valueOf(cursor.getCount()));
-        if (cursor != null) {
-            if(cursor.getCount()==0) ;
-            else if (cursor.moveToFirst()) {
-                do {
-                    //테이블에서 아이디 가져오기
-                    tagID = cursor.getString(cursor.getColumnIndex("ID"));
-                } while (cursor.moveToNext());
-            }
-        }
-        String modifyName = String.format("UPDATE registered_list SET NAME = '%s' where ID = '%s'", newName, tagID);
+        String value = findValue(database, "registered_list", "NAME", beforeName, "ID");
+        String modifyName = String.format("UPDATE registered_list SET NAME = '%s' where ID = '%s'", newName, value);
         database.execSQL(modifyName);
     }
 
+    // 체크값 변경
     public String changeCheckInfo(SQLiteDatabase database, String name) {
-        String tagID = "";
-        String sql = String.format("SELECT * FROM registered_list where NAME = '%s'", name);
-        Log.d("Query",sql);
-        Cursor cursor1 = database.rawQuery(sql, null);
-        Log.d("cursor", String.valueOf(cursor1.getCount()));
-        if (cursor1 != null) {
-            if(cursor1.getCount()==0) ;
-            else if (cursor1.moveToFirst()) {
-                do {
-                    //테이블에서 아이디 가져오기
-                    tagID = cursor1.getString(cursor1.getColumnIndex("ID"));
-                } while (cursor1.moveToNext());
-            }
+        String tagID = findValue(database, "registered_list", "NAME", name, "ID");
+
+        String check_value = findValue(database, "check_info", "ID", tagID, "CHECK_VALUE");
+
+        String modifyChecked = String.format("UPDATE check_info SET CHECK_VALUE = 'Y' where ID = '%s'", tagID);
+        String modifyUnchecked = String.format("UPDATE check_info SET CHECK_VALUE = 'N' where ID = '%s'", tagID);
+        if(check_value.equals("N")) {
+            database.execSQL(modifyChecked);
         }
-        String checkInfo = "";
-        String query = String.format("SELECT * FROM check_info where id = '%s'",tagID);
+        else {
+            database.execSQL(modifyUnchecked);
+        }
+
+        check_value = findValue(database, "check_info", "ID", tagID, "CHECK_VALUE");
+
+        return check_value;
+    }
+
+    /**
+    테이블에서 원하는 값 찾기.
+        findValue(DB 이름, 테이블이름, 알고 있는 값을 가지고 있는 컬럼, 알고있는 값, 원하는 값을 갖고 있는 컬럼)
+    **/
+    public String findValue(SQLiteDatabase database, String table_name, String clue_column, String clue_value, String target_column) {
+        String value = "";
+        String query = String.format("SELECT * FROM %s where %s = '%s'",table_name, clue_column, clue_value);
         Log.d("Query",query);
         Cursor cursor = database.rawQuery(query, null);
         Log.d("cursor", String.valueOf(cursor.getCount()));
@@ -133,23 +104,11 @@ public class Query {
             if(cursor.getCount()==0) ;
             else if (cursor.moveToFirst()) {
                 do {
-                    //테이블에서 check 정보 가져오기
-                    checkInfo = cursor.getString(cursor.getColumnIndex("CHECK_VALUE"));
+                    //테이블에서 in_out 정보 가져오기
+                    value = cursor.getString(cursor.getColumnIndex(target_column));
                 } while (cursor.moveToNext());
             }
         }
-
-        String modifyChecked = String.format("UPDATE check_info SET CHECK_VALUE = 'Y' where ID = '%s'", tagID);
-        String modifyUnchecked = String.format("UPDATE check_info SET CHECK_VALUE = 'N' where ID = '%s'", tagID);
-        if(checkInfo.equals("N")) {
-            database.execSQL(modifyChecked);
-            checkInfo = "Y";
-        }
-        else {
-            database.execSQL(modifyUnchecked);
-            checkInfo = "N";
-        }
-
-        return checkInfo;
+        return value;
     }
 }
