@@ -20,8 +20,6 @@ public class ItemInfoDialog extends Activity {
     private NfcAdapter nfcAdapter;
     private PendingIntent pendingIntent;
     private EditText et;
-    private String tagUid;
-    private String tagName;
     private String beforeName;
 
     @Override
@@ -41,8 +39,8 @@ public class ItemInfoDialog extends Activity {
         database = dbHelper.getWritableDatabase();
 
         //버튼 이벤트 등록
-        Button btnOk = findViewById(R.id.btnDelete);
-        btnOk.setOnClickListener(new View.OnClickListener() {
+        Button btnDelete = findViewById(R.id.btnDelete);
+        btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 //                Toast.makeText(getApplicationContext(),"삭제버튼",Toast.LENGTH_SHORT).show();
@@ -54,8 +52,8 @@ public class ItemInfoDialog extends Activity {
             }
         });
 
-        Button btnCancel = findViewById(R.id.btnModify);
-        btnCancel.setOnClickListener(new View.OnClickListener() {
+        Button btnModify = findViewById(R.id.btnModify);
+        btnModify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 //                Toast.makeText(getApplicationContext(),"수정버튼",Toast.LENGTH_SHORT).show();

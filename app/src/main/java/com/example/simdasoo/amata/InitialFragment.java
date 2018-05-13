@@ -150,13 +150,13 @@ public class InitialFragment extends Fragment {
                 }
                 mListView.setAdapter(mAdapter);
                 // 아이템 클릭 이벤트 리스너 추가
-                mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                mListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
                     @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                        Toast.makeText(getActivity(), mList.get(position), Toast.LENGTH_SHORT).show();
+                    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                         Intent intent = new Intent(getActivity(), ItemInfoDialog.class);
                         intent.putExtra("beforeName",mList.get(position));
                         startActivity(intent);
+                        return true;
                     }
                 });
                 mAdapter.notifyDataSetChanged();
