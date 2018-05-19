@@ -33,7 +33,7 @@ public class Query {
     }
 
     // 기준 태그가 있는지 판단
-    public int existMain(SQLiteDatabase database){
+    public boolean existMain(SQLiteDatabase database){
         int exist = 0;
         String sql_main = "select * from main";
 
@@ -42,7 +42,8 @@ public class Query {
         if (cursor_main != null){
             exist += cursor_main.getCount();
         }
-        return exist;
+        if(exist == 0) return false;
+        else           return true;
     }
 
     // DB 데이터 개수 조회
@@ -50,7 +51,7 @@ public class Query {
         int count = 0;
         String sql_reg = "select * from registered_list";
         Cursor cursor_reg = database.rawQuery(sql_reg, null);
-        if(existMain(database)==1) count++;
+        if(existMain(database)) count++;
         if (cursor_reg != null) {
             count += cursor_reg.getCount(); // 등록된 물품 개수얻기
         }

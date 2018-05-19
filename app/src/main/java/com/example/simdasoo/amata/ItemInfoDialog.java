@@ -21,6 +21,7 @@ public class ItemInfoDialog extends Activity {
     private PendingIntent pendingIntent;
     private EditText et;
     private String beforeName;
+    private int position;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -29,6 +30,7 @@ public class ItemInfoDialog extends Activity {
         et = (EditText) findViewById(R.id.nameValue);
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         final Intent getIntent = getIntent();
+        position = getIntent.getIntExtra("position", -1);
         beforeName = getIntent.getStringExtra("beforeName");
         final Intent intent = new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
@@ -44,7 +46,8 @@ public class ItemInfoDialog extends Activity {
             @Override
             public void onClick(View view) {
 //                Toast.makeText(getApplicationContext(),"삭제버튼",Toast.LENGTH_SHORT).show();
-                query.deleteItme(database, beforeName);
+                if(position != 0) query.deleteItme(database, beforeName);
+                else database.execSQL("DELETE FROM main");
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
                 overridePendingTransition(0, 0);

@@ -60,11 +60,11 @@ public class NfcRequestDialog extends Activity {
                         tagUid = String.valueOf(et.getHint());
                         tagName = String.valueOf(et.getText());
                     }
-                    if(query.existMain(database)==1) {
+                    if(query.existMain(database)) {
                         query.addStuff(database, tagUid, tagName);
                     }
                     else {
-                        database.execSQL("INSERT INTO main VALUES('" + tagUid + "','" + tagName + "')");
+                        database.execSQL("INSERT INTO main(ID, NAME) VALUES('" + tagUid + "','" + tagName + "')");
                     }
 
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);

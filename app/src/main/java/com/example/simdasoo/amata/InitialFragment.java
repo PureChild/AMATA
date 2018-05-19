@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -95,13 +96,11 @@ public class InitialFragment extends Fragment {
         //초기화면 등록된 물건이 없을 경우
         tv = (TextView) rootview.findViewById(R.id.tv_main);
         if(cntStuff == 0){
-//            tv.setText("test");
-            tv.setText("+ 버튼을 눌러 기준이 될 태그를 등록해주세요.");
+            tv.setText("+ 버튼을 눌러 태그를 등록해주세요. \n 기준이 없을 경우 기준으로 등록됩니다.");
         }
         else {
             mListView= (ListView) rootview.findViewById(R.id.stuff_list);
             showList(database);
-//            tv.setText(str);
             tv.setVisibility(View.GONE);
         }
 
@@ -137,7 +136,19 @@ public class InitialFragment extends Fragment {
         Cursor mainTag = database.rawQuery("SELECT * FROM main", null);
         Cursor cursor = database.rawQuery("SELECT * FROM registered_list", null);
         mList = new ArrayList<String>();
-        mAdapter =  new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, mList);
+        mAdapter =  new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, mList){
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent)
+            {
+                View view = super.getView(position, convertView, parent);
+                TextView tv = (TextView) view.findViewById(android.R.id.text1);
+                if(position==0){
+                    tv.setText("기준 : " + tv.getText());
+                    tv.setTextColor(Color.WHITE);
+                }
+                return view;
+            }
+        };
         try {
             if(mainTag != null) {
                 if(mainTag.moveToFirst()){
@@ -146,6 +157,7 @@ public class InitialFragment extends Fragment {
                         mList.add(0,NAME);
                     } while (mainTag.moveToNext());
                 }
+                else mList.add(0,"없음");
             }
             //SELECT문을 사용하여 테이블에 있는 데이터를 가져옵니다..
             if (cursor != null) {
@@ -163,6 +175,7 @@ public class InitialFragment extends Fragment {
                     @Override
                     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                         Intent intent = new Intent(getActivity(), ItemInfoDialog.class);
+                        intent.putExtra("position",position);
                         intent.putExtra("beforeName",mList.get(position));
                         startActivity(intent);
                         return true;

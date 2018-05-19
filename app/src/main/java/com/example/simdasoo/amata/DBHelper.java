@@ -15,7 +15,9 @@ public class DBHelper extends SQLiteOpenHelper {
         StringBuffer main_sb = new StringBuffer();
         main_sb.append(" CREATE TABLE main ( ");
         main_sb.append(" ID VARCHAR(20) PRIMARY KEY NOT NULL, ");
-        main_sb.append(" NAME VARCHAR(20)); ");
+        main_sb.append(" NAME VARCHAR(20), ");
+        main_sb.append(" IN_OUT VARCHAR(2) DEFAULT 'I', ");
+        main_sb.append(" CHECK_VALUE VARCHAR(2) DEFAULT 'Y'); ");
 
         // registered_list 테이블 SQL문
         StringBuffer reg_sb = new StringBuffer();

@@ -1,10 +1,14 @@
 package com.example.simdasoo.amata;
 
+import android.annotation.SuppressLint;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,7 +16,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.CheckedTextView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -38,10 +45,31 @@ public class ChecklistFragment extends Fragment {
         return rootview;
     }
     protected void showList(final SQLiteDatabase database){
+        Cursor mainTag = database.rawQuery("SELECT * FROM main", null);
         Cursor cursor = database.rawQuery("SELECT * FROM registered_list", null);
         cList = new ArrayList<String>();
-        cAdapter =  new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_multiple_choice, cList);
+        cAdapter =  new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_multiple_choice, cList){
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent)
+            {
+                View view = super.getView(position, convertView, parent);
+                if(position==0) {
+                    CheckedTextView tv = (CheckedTextView) view.findViewById(android.R.id.text1);
+                    tv.setText("기준 : " + tv.getText());
+                    tv.setTextColor(Color.WHITE);
+                }
+                return view;
+            }
+        };
         try {
+            if(mainTag != null) {
+                if(mainTag.moveToFirst()){
+                    do {
+                        String NAME = mainTag.getString(mainTag.getColumnIndex("NAME"));
+                        cList.add(0,NAME);
+                    } while (mainTag.moveToNext());
+                }
+            }
             //SELECT문을 사용하여 테이블에 있는 데이터를 가져옵니다.
             if (cursor != null) {
                 if (cursor.moveToFirst()) {
@@ -52,12 +80,18 @@ public class ChecklistFragment extends Fragment {
                     } while (cursor.moveToNext());
                 }
                 cListView.setAdapter(cAdapter);
+                cListView.setItemChecked(0, true);
                 cListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 //                        Toast.makeText(getActivity(), cList.get(position), Toast.LENGTH_SHORT).show();
-                        String name = cList.get(position);
-                        Toast.makeText(getActivity(), query.changeCheckInfo(database, name) , Toast.LENGTH_SHORT).show();
+                        if(position==0) {
+                            cListView.setItemChecked(0, true);
+                        }
+                        else {
+                            String name = cList.get(position);
+                            Toast.makeText(getActivity(), query.changeCheckInfo(database, name), Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
                 cAdapter.notifyDataSetChanged();
