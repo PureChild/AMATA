@@ -99,7 +99,7 @@ public class InitialFragment extends Fragment {
             tv.setText("+ 버튼을 눌러 기준이 될 태그를 등록해주세요.");
         }
         else {
-            mListView= (ListView) rootview.findViewById(R.id.registered_list);
+            mListView= (ListView) rootview.findViewById(R.id.stuff_list);
             showList(database);
 //            tv.setText(str);
             tv.setVisibility(View.GONE);
@@ -134,10 +134,19 @@ public class InitialFragment extends Fragment {
     }
 
     protected void showList(SQLiteDatabase database){
+        Cursor mainTag = database.rawQuery("SELECT * FROM main", null);
         Cursor cursor = database.rawQuery("SELECT * FROM registered_list", null);
         mList = new ArrayList<String>();
         mAdapter =  new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, mList);
         try {
+            if(mainTag != null) {
+                if(mainTag.moveToFirst()){
+                    do {
+                        String NAME = mainTag.getString(mainTag.getColumnIndex("NAME"));
+                        mList.add(0,NAME);
+                    } while (mainTag.moveToNext());
+                }
+            }
             //SELECT문을 사용하여 테이블에 있는 데이터를 가져옵니다..
             if (cursor != null) {
                 if (cursor.moveToFirst()) {

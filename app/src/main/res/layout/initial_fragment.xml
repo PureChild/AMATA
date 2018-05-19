@@ -12,7 +12,7 @@
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/registered_list"/>
+        android:id="@+id/stuff_list"/>
 
     <TextView
         android:id="@+id/tv_main"

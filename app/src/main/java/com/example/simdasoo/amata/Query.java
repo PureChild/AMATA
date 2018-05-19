@@ -13,11 +13,11 @@ public class Query {
         this.context = context;
     }
 
-    //DB에 데이터 삽입
-    void testInsert(SQLiteDatabase database, String tagUID, String name) {
+    // DB에 데이터 삽입
+    public void addStuff(SQLiteDatabase database, String tagUID, String name) {
         String n = null;
-        //this is the real codes
-        //기등록된 태그가 아닌 경우 등록
+        // this is the real codes
+        // 기등록된 태그가 아닌 경우 등록
         try {
             database.execSQL("INSERT INTO registered_list VALUES('" + tagUID + "','" + name + "')");
             database.execSQL("INSERT INTO check_info(ID) VALUES('" + tagUID + "')");
@@ -25,19 +25,34 @@ public class Query {
         } catch (SQLException e) {
             Toast.makeText(context,"이미 등록된 태그입니다",Toast.LENGTH_SHORT).show();
         }
-        //this codes for test
+
+        // this codes for test
 //        database.execSQL("INSERT INTO registered_list VALUES('" + name + "','" + name + "')");
 //        database.execSQL("INSERT INTO check_info(ID) VALUES('" + name + "')");
 //        database.execSQL("INSERT INTO inout_info(ID) VALUES('" + name + "')");
     }
 
-    //DB 데이터 개수 조회
+    // 기준 태그가 있는지 판단
+    public int existMain(SQLiteDatabase database){
+        int exist = 0;
+        String sql_main = "select * from main";
+
+        Cursor cursor_main = database.rawQuery(sql_main, null);
+
+        if (cursor_main != null){
+            exist += cursor_main.getCount();
+        }
+        return exist;
+    }
+
+    // DB 데이터 개수 조회
     public int count(SQLiteDatabase database) {
         int count = 0;
         String sql_reg = "select * from registered_list";
         Cursor cursor_reg = database.rawQuery(sql_reg, null);
+        if(existMain(database)==1) count++;
         if (cursor_reg != null) {
-            count += cursor_reg.getCount(); //등록된 물품 개수얻기
+            count += cursor_reg.getCount(); // 등록된 물품 개수얻기
         }
         return count;
     }

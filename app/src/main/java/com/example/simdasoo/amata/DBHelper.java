@@ -11,30 +11,31 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        //registered_list 테이블 SQL문
-//        StringBuffer benchmark = new StringBuffer();
-//        benchmark.append(" CREATE TABLE benchmark ( ");
-//        benchmark.append(" ID VARCHAR(20) PRIMARY KEY NOT NULL, ");
-//        benchmark.append(" NAME VARCHAR(20)); ");
+        // main 테이블 SQL문
+        StringBuffer main_sb = new StringBuffer();
+        main_sb.append(" CREATE TABLE main ( ");
+        main_sb.append(" ID VARCHAR(20) PRIMARY KEY NOT NULL, ");
+        main_sb.append(" NAME VARCHAR(20)); ");
 
-        //registered_list 테이블 SQL문
+        // registered_list 테이블 SQL문
         StringBuffer reg_sb = new StringBuffer();
         reg_sb.append(" CREATE TABLE registered_list ( ");
         reg_sb.append(" ID VARCHAR(20) PRIMARY KEY NOT NULL, ");
         reg_sb.append(" NAME VARCHAR(20)); ");
 
-        //check_info 테이블 SQL문
+        // check_info 테이블 SQL문
         StringBuffer check_sb = new StringBuffer();
         check_sb.append(" CREATE TABLE check_info ( ");
         check_sb.append(" ID VARCHAR(20) PRIMARY KEY NOT NULL, ");
         check_sb.append(" CHECK_VALUE VARCHAR(2) DEFAULT 'N'); ");
 
-        //inout_info 테이블 SQL문
+        // inout_info 테이블 SQL문
         StringBuffer io_sb = new StringBuffer();
         io_sb.append(" CREATE TABLE inout_info ( ");
         io_sb.append(" ID VARCHAR(20) PRIMARY KEY NOT NULL, ");
         io_sb.append(" IN_OUT VARCHAR(2) DEFAULT 'I'); ");
 
+        db.execSQL(main_sb.toString());
         db.execSQL(reg_sb.toString());
         db.execSQL(check_sb.toString());
         db.execSQL(io_sb.toString());
