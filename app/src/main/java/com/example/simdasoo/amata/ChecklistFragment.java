@@ -81,6 +81,14 @@ public class ChecklistFragment extends Fragment {
                 }
                 cListView.setAdapter(cAdapter);
                 cListView.setItemChecked(0, true);
+                // 체크 상태 유지
+                for(int i = 0; i < cList.size(); i++){
+                    String tagID = query.findValue(database,"registered_list","NAME",cList.get(i),"ID");
+                    String checkValue = query.findValue(database,"check_info", "ID", tagID,"CHECK_VALUE");
+                    if(checkValue.equals("Y")){
+                        cListView.setItemChecked(i,true);
+                    }
+                }
                 cListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
