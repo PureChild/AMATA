@@ -33,6 +33,7 @@ public class BluetoothService {
 	private BluetoothAdapter btAdapter;
 
 	private InitialFragment initialFragment;
+	private MainActivity mainActivity;
 	private Handler mHandler;
 
 	private ConnectThread mConnectThread; // 변수명 다시
@@ -52,6 +53,7 @@ public class BluetoothService {
 	// Constructors
 	public BluetoothService(InitialFragment ac, Handler h) {
 		initialFragment = ac;
+		mainActivity = (MainActivity) ac.getActivity();
 		mHandler = h;
 
 		// BluetoothAdapter 얻기
@@ -377,7 +379,7 @@ public class BluetoothService {
 					}
 					if(strArrId[2] != null) {
 						id = strArrId[0] + strArrId[1] + strArrId[2];
-						initialFragment.getActivity().runOnUiThread(new Runnable() {
+						mainActivity.runOnUiThread(new Runnable() {
 							public void run() {
 //								Toast.makeText(initialFragment.getActivity(), id, Toast.LENGTH_SHORT).show();
 								initialFragment.showTagName(id);

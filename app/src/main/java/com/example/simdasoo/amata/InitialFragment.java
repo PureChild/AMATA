@@ -32,7 +32,7 @@ public class InitialFragment extends Fragment {
     int cntStuff;
 
     private DBHelper dbHelper;
-    private SQLiteDatabase database;
+    public static SQLiteDatabase database;
     private TextView tv;
     private ArrayList<String> mList;
     private ListView mListView;
@@ -73,6 +73,7 @@ public class InitialFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Log.wtf("","****************create***************");
         //추가
         View rootview = getView();
 
@@ -108,23 +109,31 @@ public class InitialFragment extends Fragment {
         if(mainActivity.first_open){
             // 블루투스
             // BluetoothService 클래스 생성
-            if(btService == null) {
-                btService = new BluetoothService(this, mHandler);
-            }
+            btService = new BluetoothService(this, mHandler);
+            Log.wtf("","****************btService***************");
 
             btService.enableBluetooth();
 
             mainActivity.first_open = false;
+        }
+        else {
+            btService = new BluetoothService(this, mHandler);
+            Log.wtf("","****************btService***************");
         }
 
         return rootview;
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
     public void onDetach() {
         super.onDetach();
         //종료 시 DB와 연결 끊기
-        database.close();
+//        database.close();
     }
 
     @Override
@@ -227,10 +236,10 @@ public class InitialFragment extends Fragment {
             tagName = query.findValue(database, "registered_list", "ID", tagID, "NAME");
         }
         if(tagName!="") {
-            Toast.makeText(getActivity(), tagName, Toast.LENGTH_SHORT).show();
+            Toast.makeText(mainActivity, tagName, Toast.LENGTH_SHORT).show();
         }
         else{
-            Toast.makeText(getActivity(), "등록되지 않은 태그입니다.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mainActivity, "등록되지 않은 태그입니다.", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -240,15 +249,15 @@ public class InitialFragment extends Fragment {
         if(query.isItMain(database,tagID)) {
             query.changeInOut(database, tagID, "main");
             inOutInfo = query.findValue(database, "main", "ID", tagID, "IN_OUT");
-            if(inOutInfo.equals("I")) Toast.makeText(getActivity(), "현재위치 : 안", Toast.LENGTH_SHORT).show();
-            else if(inOutInfo.equals("O")) Toast.makeText(getActivity(), "현재위치 : 밖", Toast.LENGTH_SHORT).show();
+            if(inOutInfo.equals("I")) Toast.makeText(mainActivity, "현재위치 : 안", Toast.LENGTH_SHORT).show();
+            else if(inOutInfo.equals("O")) Toast.makeText(mainActivity, "현재위치 : 밖", Toast.LENGTH_SHORT).show();
             judgement();
         }
         else {
             query.changeInOut(database, tagID, "inout_info");
             inOutInfo = query.findValue(database, "inout_info", "ID", tagID, "IN_OUT");
-            if(inOutInfo.equals("I")) Toast.makeText(getActivity(), "현재위치 : 안", Toast.LENGTH_SHORT).show();
-            else if(inOutInfo.equals("O")) Toast.makeText(getActivity(), "현재위치 : 밖", Toast.LENGTH_SHORT).show();
+            if(inOutInfo.equals("I")) Toast.makeText(mainActivity, "현재위치 : 안", Toast.LENGTH_SHORT).show();
+            else if(inOutInfo.equals("O")) Toast.makeText(mainActivity, "현재위치 : 밖", Toast.LENGTH_SHORT).show();
         }
         Log.d("inOutInfo", inOutInfo);
 
@@ -318,7 +327,7 @@ public class InitialFragment extends Fragment {
 
         // 알림
         if(!missItem.isEmpty())
-            Toast.makeText(getActivity(), missItem + "챙기셨나요", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mainActivity, missItem + "챙기셨나요", Toast.LENGTH_SHORT).show();
 
         missItem = new ArrayList<>();
     }

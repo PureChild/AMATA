@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity
 
     public static boolean first_open = true;
     private BackPressCloseHandler backPressCloseHandler;
+    private InitialFragment initialFragment;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -59,6 +60,7 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.frag_container, new InitialFragment()).commit();
+        initialFragment = new InitialFragment();
 
         backPressCloseHandler = new BackPressCloseHandler(this);
     }
@@ -67,6 +69,7 @@ public class MainActivity extends AppCompatActivity
     public void onBackPressed() {
         //두번 누르면 종료
         backPressCloseHandler.onBackPressed();
+        initialFragment.database.close();
     }
 
     @Override
