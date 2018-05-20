@@ -46,6 +46,25 @@ public class Query {
         else           return true;
     }
 
+    // main 데이터 얻기
+    public String getFromMain(SQLiteDatabase database, String column) {
+        String sql_main = "select * from main";
+        String value = "";
+
+        Cursor cursor = database.rawQuery(sql_main, null);
+
+        if (cursor != null){
+            if(cursor.getCount()==0) ;
+            else if (cursor.moveToFirst()) {
+                do {
+                    //테이블에서 원하는 정보 가져오기
+                    value = cursor.getString(cursor.getColumnIndex(column));
+                } while (cursor.moveToNext());
+            }
+        }
+        return value;
+    }
+
     // DB 데이터 개수 조회
     public int count(SQLiteDatabase database) {
         int count = 0;
@@ -58,27 +77,14 @@ public class Query {
         return count;
     }
 
-    //InOut 변경
-    public void changeInOut(SQLiteDatabase database, String tagID) {
-        String change2Out = "";
-        String change2In = "";
-        String inout = "";
-
+    // InOut 변경
+    public void changeInOut(SQLiteDatabase database, String tagID, String tableName) {
         // inout 정보 얻기
-        if(isItMain(database,tagID))
-            inout = findValue(database, "main", "ID", tagID, "IN_OUT");
-        else
-            inout = findValue(database, "inout_info", "ID", tagID, "IN_OUT");
+        String inout = findValue(database, tableName, "ID", tagID, "IN_OUT");
 
         // inout 변경 쿼리
-        if(isItMain(database,tagID)){
-            change2Out = String.format("UPDATE main SET IN_OUT = 'O' where id = '%s'",tagID);
-            change2In = String.format("UPDATE main SET IN_OUT = 'I' where id = '%s'",tagID);
-        }
-        else{
-            change2Out = String.format("UPDATE inout_info SET IN_OUT = 'O' where id = '%s'",tagID);
-            change2In = String.format("UPDATE inout_info SET IN_OUT = 'I' where id = '%s'",tagID);
-        }
+        String change2Out = String.format("UPDATE %s SET IN_OUT = 'O' where id = '%s'", tableName, tagID);
+        String change2In = String.format("UPDATE %s SET IN_OUT = 'I' where id = '%s'", tableName, tagID);
 
         // inout 변경
         if(inout.equals("I")) database.execSQL(change2Out);
@@ -137,7 +143,7 @@ public class Query {
             if(cursor.getCount()==0) ;
             else if (cursor.moveToFirst()) {
                 do {
-                    //테이블에서 in_out 정보 가져오기
+                    //테이블에서 원하는 정보 가져오기
                     value = cursor.getString(cursor.getColumnIndex(target_column));
                 } while (cursor.moveToNext());
             }

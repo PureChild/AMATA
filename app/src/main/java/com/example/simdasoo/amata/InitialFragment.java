@@ -237,16 +237,89 @@ public class InitialFragment extends Fragment {
     public void changeInOut(String id) {
         String tagID = id.substring(0,id.length()-2);
         String inOutInfo = "";
-        query.changeInOut(database, tagID);
-
-        if(query.isItMain(database,tagID))
+        if(query.isItMain(database,tagID)) {
+            query.changeInOut(database, tagID, "main");
             inOutInfo = query.findValue(database, "main", "ID", tagID, "IN_OUT");
-        else
+            if(inOutInfo.equals("I")) Toast.makeText(getActivity(), "현재위치 : 안", Toast.LENGTH_SHORT).show();
+            else if(inOutInfo.equals("O")) Toast.makeText(getActivity(), "현재위치 : 밖", Toast.LENGTH_SHORT).show();
+            judgement();
+        }
+        else {
+            query.changeInOut(database, tagID, "inout_info");
             inOutInfo = query.findValue(database, "inout_info", "ID", tagID, "IN_OUT");
+            if(inOutInfo.equals("I")) Toast.makeText(getActivity(), "현재위치 : 안", Toast.LENGTH_SHORT).show();
+            else if(inOutInfo.equals("O")) Toast.makeText(getActivity(), "현재위치 : 밖", Toast.LENGTH_SHORT).show();
+        }
         Log.d("inOutInfo", inOutInfo);
 
-        if(inOutInfo.equals("I")) Toast.makeText(getActivity(), "현재위치 : 안", Toast.LENGTH_SHORT).show();
-        else if(inOutInfo.equals("O")) Toast.makeText(getActivity(), "현재위치 : 밖", Toast.LENGTH_SHORT).show();
         inOutInfo = "";
+    }
+
+    public void judgement() {
+        /*
+        * 1. main의 현재 위치 상태 받아옴 - String
+        * 2. check된 물건들 id 배열에 저장 - arraylist
+        * 3. 해당 id로 in/out 정보 검색 - arraylist
+        * 4. main이랑 위치가 다른 인덱스 저장 - arraylist
+        * 5. 이름 얻기 - arraylist
+        * */
+
+        // 1
+        String mainIoStat = "";
+        String sql_main = "select * from main";
+
+        Cursor cursor_main = database.rawQuery(sql_main, null);
+
+        if (cursor_main != null){
+            if(cursor_main.getCount()==0) ;
+            else if (cursor_main.moveToFirst()) {
+                do {
+                    mainIoStat = cursor_main.getString(cursor_main.getColumnIndex("IN_OUT"));
+                } while (cursor_main.moveToNext());
+            }
+        }
+        Log.d("mainIoStat", String.valueOf(mainIoStat));
+
+        // 2
+        String sql_check = "select * from check_info";
+        ArrayList<String> checkedID = new ArrayList<>();
+
+        Cursor cursor = database.rawQuery(sql_check, null);
+
+        if (cursor != null){
+            if(cursor.getCount()==0) ;
+            else if (cursor.moveToFirst()) {
+                do {
+                    String checkStat = cursor.getString(cursor.getColumnIndex("CHECK_VALUE"));
+                    if(checkStat.equals("Y"))
+                        checkedID.add(cursor.getString(cursor.getColumnIndex("ID")));
+                } while (cursor.moveToNext());
+            }
+        }
+        Log.d("checkedID", String.valueOf(checkedID));
+
+        // 3
+        ArrayList<String> IoInfo = new ArrayList<>();
+        ArrayList<Integer> index = new ArrayList<>();
+        for(int i = 0; i < checkedID.size(); i++){
+            IoInfo.add(query.findValue(database,"inout_info","ID",checkedID.get(i),"IN_OUT"));
+            index.add(i);
+        }
+        Log.d("IoInfo", String.valueOf(IoInfo));
+        Log.d("index", String.valueOf(index));
+
+        // 4 & 5
+        ArrayList<String> missItem = new ArrayList<>();
+        for(int i = 0; i < IoInfo.size(); i++){
+            if(!IoInfo.get(i).equals(mainIoStat))
+            missItem.add(query.findValue(database,"registered_list","ID",checkedID.get(index.get(i)),"NAME"));
+        }
+        Log.d("missItem", String.valueOf(missItem));
+
+        // 알림
+        if(!missItem.isEmpty())
+            Toast.makeText(getActivity(), missItem + "챙기셨나요", Toast.LENGTH_SHORT).show();
+
+        missItem = new ArrayList<>();
     }
 }
