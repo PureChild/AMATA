@@ -217,28 +217,32 @@ public class InitialFragment extends Fragment {
 
     public void showTagName(String id) {
         String tagID = id.substring(0,id.length()-2);
+        String sql = "";
+        String tagName = "";
         Log.d("ID",tagID);
-        String query = String.format("SELECT * FROM registered_list where id = '%s'",tagID);
-        Log.d("Query",query);
-        Cursor cursor = database.rawQuery(query, null);
-        Log.d("cursor", String.valueOf(cursor.getCount()));
-        if (cursor != null) {
-            if(cursor.getCount()==0) Toast.makeText(getActivity(), "등록되지 않은 태그입니다.", Toast.LENGTH_SHORT).show();
-            else if (cursor.moveToFirst()) {
-                do {
-                    //테이블에서 이름 가져오기
-                    String NAME = cursor.getString(cursor.getColumnIndex("NAME"));
-                    Toast.makeText(getActivity(), NAME, Toast.LENGTH_SHORT).show();
-                } while (cursor.moveToNext());
-            }
+        if(query.isItMain(database,tagID)) {
+            tagName = query.findValue(database, "main", "ID", tagID, "NAME");
+        }
+        else{
+            tagName = query.findValue(database, "registered_list", "ID", tagID, "NAME");
+        }
+        if(tagName!="") {
+            Toast.makeText(getActivity(), tagName, Toast.LENGTH_SHORT).show();
+        }
+        else{
+            Toast.makeText(getActivity(), "등록되지 않은 태그입니다.", Toast.LENGTH_SHORT).show();
         }
     }
 
     public void changeInOut(String id) {
         String tagID = id.substring(0,id.length()-2);
+        String inOutInfo = "";
         query.changeInOut(database, tagID);
 
-        String inOutInfo = query.findValue(database, "inout_info", "ID", tagID, "IN_OUT");
+        if(query.isItMain(database,tagID))
+            inOutInfo = query.findValue(database, "main", "ID", tagID, "IN_OUT");
+        else
+            inOutInfo = query.findValue(database, "inout_info", "ID", tagID, "IN_OUT");
         Log.d("inOutInfo", inOutInfo);
 
         if(inOutInfo.equals("I")) Toast.makeText(getActivity(), "현재위치 : 안", Toast.LENGTH_SHORT).show();

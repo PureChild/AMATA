@@ -60,10 +60,27 @@ public class Query {
 
     //InOut 변경
     public void changeInOut(SQLiteDatabase database, String tagID) {
-        String inout = findValue(database, "inout_info", "ID", tagID, "IN_OUT");
+        String change2Out = "";
+        String change2In = "";
+        String inout = "";
 
-        String change2Out = String.format("UPDATE inout_info SET IN_OUT = 'O' where id = '%s'",tagID);
-        String change2In = String.format("UPDATE inout_info SET IN_OUT = 'I' where id = '%s'",tagID);
+        // inout 정보 얻기
+        if(isItMain(database,tagID))
+            inout = findValue(database, "main", "ID", tagID, "IN_OUT");
+        else
+            inout = findValue(database, "inout_info", "ID", tagID, "IN_OUT");
+
+        // inout 변경 쿼리
+        if(isItMain(database,tagID)){
+            change2Out = String.format("UPDATE main SET IN_OUT = 'O' where id = '%s'",tagID);
+            change2In = String.format("UPDATE main SET IN_OUT = 'I' where id = '%s'",tagID);
+        }
+        else{
+            change2Out = String.format("UPDATE inout_info SET IN_OUT = 'O' where id = '%s'",tagID);
+            change2In = String.format("UPDATE inout_info SET IN_OUT = 'I' where id = '%s'",tagID);
+        }
+
+        // inout 변경
         if(inout.equals("I")) database.execSQL(change2Out);
         else database.execSQL(change2In);
     }
@@ -126,5 +143,11 @@ public class Query {
             }
         }
         return value;
+    }
+
+    public boolean isItMain(SQLiteDatabase database, String tagID) {
+        String tagName = findValue(database, "main", "ID", tagID, "NAME");
+        if(tagName!="") return true;
+        else            return false;
     }
 }
