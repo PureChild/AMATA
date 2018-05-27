@@ -2,6 +2,7 @@ package com.example.simdasoo.amata;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
+import android.app.NotificationChannelGroup;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -22,6 +23,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -129,5 +132,46 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onPause() {
         super.onPause();
+    }
+
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void createNotification(ArrayList<String> missItem) {
+        NotificationManager mNotificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        int importance = NotificationManager.IMPORTANCE_LOW;
+
+        NotificationChannel mChannel = new NotificationChannel("AMATA", "name", importance);
+
+        // Configure the notification channel.
+        mChannel.setDescription("missingItem");
+        mChannel.enableLights(true);
+
+        // Sets the notification light color for notifications posted to this
+        // channel, if the device supports this feature.
+        mChannel.setLightColor(Color.RED);
+        mChannel.enableVibration(true);
+        mChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
+
+        mNotificationManager.createNotificationChannel(mChannel);
+
+        mNotificationManager.createNotificationChannelGroup(new NotificationChannelGroup("group", "AMATA"));
+
+        mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        // Sets an ID for the notification, so it can be updated.
+        int notifyID = 1;
+
+        // Create a notification and set the notification channel.
+        Notification notification = new Notification.Builder(MainActivity.this)
+                .setContentTitle("아 맞다!")
+                .setContentText(missItem + "챙기셨나요?")
+                .setSmallIcon(R.drawable.ic_launcher_background)
+                .setChannelId("AMATA")
+                .build();
+
+        // Issue the notification.
+        mNotificationManager.notify(0, notification);
     }
 }

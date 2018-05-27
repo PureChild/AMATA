@@ -98,7 +98,7 @@ public class ChecklistFragment extends Fragment {
                         }
                         else {
                             String name = cList.get(position);
-                            Toast.makeText(getActivity(), query.changeCheckInfo(database, name), Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(getActivity(), query.changeCheckInfo(database, name), Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

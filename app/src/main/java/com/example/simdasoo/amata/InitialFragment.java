@@ -6,10 +6,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -243,27 +245,29 @@ public class InitialFragment extends Fragment {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void changeInOut(String id) {
         String tagID = id.substring(0,id.length()-2);
         String inOutInfo = "";
         if(query.isItMain(database,tagID)) {
             query.changeInOut(database, tagID, "main");
             inOutInfo = query.findValue(database, "main", "ID", tagID, "IN_OUT");
-            if(inOutInfo.equals("I")) Toast.makeText(mainActivity, "현재위치 : 안", Toast.LENGTH_SHORT).show();
-            else if(inOutInfo.equals("O")) Toast.makeText(mainActivity, "현재위치 : 밖", Toast.LENGTH_SHORT).show();
+//            if(inOutInfo.equals("I")) Toast.makeText(mainActivity, "현재위치 : 안", Toast.LENGTH_SHORT).show();
+//            else if(inOutInfo.equals("O")) Toast.makeText(mainActivity, "현재위치 : 밖", Toast.LENGTH_SHORT).show();
             judgement();
         }
         else {
             query.changeInOut(database, tagID, "inout_info");
             inOutInfo = query.findValue(database, "inout_info", "ID", tagID, "IN_OUT");
-            if(inOutInfo.equals("I")) Toast.makeText(mainActivity, "현재위치 : 안", Toast.LENGTH_SHORT).show();
-            else if(inOutInfo.equals("O")) Toast.makeText(mainActivity, "현재위치 : 밖", Toast.LENGTH_SHORT).show();
+//            if(inOutInfo.equals("I")) Toast.makeText(mainActivity, "현재위치 : 안", Toast.LENGTH_SHORT).show();
+//            else if(inOutInfo.equals("O")) Toast.makeText(mainActivity, "현재위치 : 밖", Toast.LENGTH_SHORT).show();
         }
         Log.d("inOutInfo", inOutInfo);
 
         inOutInfo = "";
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void judgement() {
         /*
         * 1. main의 현재 위치 상태 받아옴 - String
@@ -326,8 +330,10 @@ public class InitialFragment extends Fragment {
         Log.d("missItem", String.valueOf(missItem));
 
         // 알림
-        if(!missItem.isEmpty())
-            Toast.makeText(mainActivity, missItem + "챙기셨나요", Toast.LENGTH_SHORT).show();
+        if(!missItem.isEmpty()) {
+//            Toast.makeText(mainActivity, missItem + "챙기셨나요", Toast.LENGTH_SHORT).show();
+            mainActivity.createNotification(missItem);
+        }
 
         missItem = new ArrayList<>();
     }
