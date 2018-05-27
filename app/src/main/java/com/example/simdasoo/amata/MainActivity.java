@@ -1,16 +1,19 @@
 package com.example.simdasoo.amata;
 
-import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -32,6 +35,8 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.v("MainActivity","실행됨");
+
+        AppSettings.setSettingsValue(AppSettings.SETTINGS_BACKGROUND_SERVICE, true, 0, null);
 
         setContentView(R.layout.activity_main);
 
@@ -67,9 +72,10 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
+//        super.onBackPressed();
         //두번 누르면 종료
         backPressCloseHandler.onBackPressed();
-        initialFragment.database.close();
+//        initialFragment.database.close();
     }
 
     @Override
