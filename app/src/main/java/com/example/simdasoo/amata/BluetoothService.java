@@ -5,12 +5,15 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Handler;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class BluetoothService {
@@ -367,6 +370,8 @@ public class BluetoothService {
 			Log.i(TAG, "BEGIN mConnectedThread");
 			byte[] buffer = new byte[1024];
 			int bytes;
+			int cnt = 0;
+			final ArrayList<String> ids = new ArrayList<>();
 
 			// Keep listening to the InputStream while connected
 			while (true) {
@@ -379,10 +384,16 @@ public class BluetoothService {
 					}
 					if(strArrId[2] != null) {
 						id = strArrId[0] + strArrId[1] + strArrId[2];
+						ids.add(id);
+						cnt++;
+						final int finalCnt = cnt;
 						mainActivity.runOnUiThread(new Runnable() {
+							@RequiresApi(api = Build.VERSION_CODES.O)
 							public void run() {
 //								Toast.makeText(initialFragment.getActivity(), id, Toast.LENGTH_SHORT).show();
-								initialFragment.showTagName(id);
+								for(int i = 0; i < finalCnt; i++) {
+									initialFragment.showTagName(ids.get(i));
+								}
 								initialFragment.changeInOut(id);
 //								initialFragment.judgement();
 							}
