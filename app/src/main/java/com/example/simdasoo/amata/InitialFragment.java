@@ -26,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Timer;
 
 
 //첫화면
@@ -63,6 +64,10 @@ public class InitialFragment extends Fragment {
     };
 
     // </bluetooth>
+
+    // 푸시 알림
+    private Timer timer;
+    private Notification notification;
 
     public View getView(){
         View rootview = getLayoutInflater().inflate(R.layout.initial_fragment,null);
@@ -252,15 +257,20 @@ public class InitialFragment extends Fragment {
         if(query.isItMain(database,tagID)) {
             query.changeInOut(database, tagID, "main");
             inOutInfo = query.findValue(database, "main", "ID", tagID, "IN_OUT");
-//            if(inOutInfo.equals("I")) Toast.makeText(mainActivity, "현재위치 : 안", Toast.LENGTH_SHORT).show();
-//            else if(inOutInfo.equals("O")) Toast.makeText(mainActivity, "현재위치 : 밖", Toast.LENGTH_SHORT).show();
-            judgement();
+            if(inOutInfo.equals("I")) Toast.makeText(mainActivity, "현재위치 : 안", Toast.LENGTH_SHORT).show();
+            else if(inOutInfo.equals("O")) Toast.makeText(mainActivity, "현재위치 : 밖", Toast.LENGTH_SHORT).show();
+
+            // 기준 태그가 읽히면 알림
+            // 타임 딜레이를 넣어줌으로써 다른 태그가 읽힐 시간을 벎
+            timer = new Timer(true);
+            notification = new Notification(this);
+            timer.schedule(notification,10000);
         }
         else {
             query.changeInOut(database, tagID, "inout_info");
             inOutInfo = query.findValue(database, "inout_info", "ID", tagID, "IN_OUT");
-//            if(inOutInfo.equals("I")) Toast.makeText(mainActivity, "현재위치 : 안", Toast.LENGTH_SHORT).show();
-//            else if(inOutInfo.equals("O")) Toast.makeText(mainActivity, "현재위치 : 밖", Toast.LENGTH_SHORT).show();
+            if(inOutInfo.equals("I")) Toast.makeText(mainActivity, "현재위치 : 안", Toast.LENGTH_SHORT).show();
+            else if(inOutInfo.equals("O")) Toast.makeText(mainActivity, "현재위치 : 밖", Toast.LENGTH_SHORT).show();
         }
         Log.d("inOutInfo", inOutInfo);
 
