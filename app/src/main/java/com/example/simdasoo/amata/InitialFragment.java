@@ -264,7 +264,7 @@ public class InitialFragment extends Fragment {
             // 타임 딜레이를 넣어줌으로써 다른 태그가 읽힐 시간을 벎
             timer = new Timer(true);
             notification = new Notification(this);
-            timer.schedule(notification,10000);
+            timer.schedule(notification,1000);
         }
         else {
             query.changeInOut(database, tagID, "inout_info");
