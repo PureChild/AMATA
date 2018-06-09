@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.ResourceBundle;
 import java.util.UUID;
 
 public class BluetoothService {
@@ -370,8 +371,6 @@ public class BluetoothService {
 			Log.i(TAG, "BEGIN mConnectedThread");
 			byte[] buffer = new byte[1024];
 			int bytes;
-			int cnt = 0;
-			final ArrayList<String> ids = new ArrayList<>();
 
 			// Keep listening to the InputStream while connected
 			while (true) {
@@ -384,16 +383,11 @@ public class BluetoothService {
 					}
 					if(strArrId[2] != null) {
 						id = strArrId[0] + strArrId[1] + strArrId[2];
-						ids.add(id);
-						cnt++;
-						final int finalCnt = cnt;
 						mainActivity.runOnUiThread(new Runnable() {
 							@RequiresApi(api = Build.VERSION_CODES.O)
 							public void run() {
 //								Toast.makeText(initialFragment.getActivity(), id, Toast.LENGTH_SHORT).show();
-								for(int i = 0; i < finalCnt; i++) {
-									initialFragment.showTagName(ids.get(i));
-								}
+								initialFragment.showTagName(id);
 								initialFragment.changeInOut(id);
 //								initialFragment.judgement();
 							}
