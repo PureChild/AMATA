@@ -167,7 +167,7 @@ public class MainActivity extends AppCompatActivity
         Notification notification = new Notification.Builder(MainActivity.this)
                 .setContentTitle("아 맞다!")
                 .setContentText(missItem + "챙기셨나요?")
-                .setSmallIcon(R.drawable.ic_launcher_background)
+                .setSmallIcon(R.drawable.notification)
                 .setChannelId("AMATA")
                 .build();
 

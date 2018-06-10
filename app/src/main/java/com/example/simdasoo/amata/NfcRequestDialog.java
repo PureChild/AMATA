@@ -79,7 +79,7 @@ public class NfcRequestDialog extends Activity {
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(),"현재 " + String.valueOf(query.count(database)) + "개의 물건이 있습니다.",Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(),"현재 " + String.valueOf(query.count(database)) + "개의 물건이 있습니다.",Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
                 overridePendingTransition(0,0);
